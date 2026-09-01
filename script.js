@@ -111,6 +111,35 @@ function createColumnElement(col) {
     .filter((t) => t.column === col.id)
     .forEach((task) => list.appendChild(createTaskElement(task)));
 
+  let dragCounter = 0;
+
+  colEl.addEventListener("dragenter", (e) => {
+    e.preventDefault();
+    dragCounter++;
+    colEl.classList.add("drag-over");
+  });
+
+  colEl.addEventListener("dragleave", () => {
+    dragCounter--;
+    if (dragCounter === 0) colEl.classList.remove("drag-over");
+  });
+
+  colEl.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  });
+
+  colEl.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dragCounter = 0;
+    colEl.classList.remove("drag-over");
+    if (draggedTaskId === null) return;
+    tasks = tasks.map((t) =>
+      t.id === draggedTaskId ? { ...t, column: col.id } : t
+    );
+    renderBoard();
+  });
+
   colEl.append(header, list);
   return colEl;
 }
