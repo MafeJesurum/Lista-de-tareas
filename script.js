@@ -37,9 +37,10 @@ let tasks = [
   { id: 7, text: "Documentar convenciones del equipo",     column: "todo"        },
 ];
 
-let nextTaskId    = 8;
-let nextColId     = 1;
-let draggedTaskId = null;
+let nextTaskId     = 8;
+let nextColId      = 1;
+let draggedTaskId  = null;
+let activeDropdown = null;
 
 //Tarjetas
 
@@ -103,7 +104,21 @@ function createColumnElement(col) {
   counter.className = "column-counter";
   counter.textContent = tasks.filter((t) => t.column === col.id).length;
 
-  header.append(title, counter);
+  const rightSide = document.createElement("div");
+  rightSide.className = "column-header-right";
+
+  const menuBtn = document.createElement("button");
+  menuBtn.type = "button";
+  menuBtn.className = "btn-column-menu";
+  menuBtn.setAttribute("aria-label", "Opciones de columna");
+  menuBtn.textContent = "⋯";
+  menuBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    openColumnMenu(col, colEl, menuBtn);
+  });
+
+  rightSide.append(counter, menuBtn);
+  header.append(title, rightSide);
 
   const list = document.createElement("ul");
   list.className = "task-list";
@@ -143,6 +158,45 @@ function createColumnElement(col) {
   colEl.append(header, list);
   return colEl;
 }
+
+//Menú de columna
+
+function openColumnMenu(col, colEl, menuBtn) {
+  closeActiveDropdown();
+
+  const dropdown = document.createElement("div");
+  dropdown.className = "dropdown";
+  dropdown.addEventListener("click", (e) => e.stopPropagation());
+
+  const sep = document.createElement("hr");
+  sep.className = "dropdown-sep";
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "dropdown-item dropdown-item-danger";
+  deleteBtn.textContent = "Eliminar columna";
+  deleteBtn.addEventListener("click", () => {
+    closeActiveDropdown();
+    deleteColumn(col.id);
+  });
+
+  dropdown.append(sep, deleteBtn);
+
+  const rect = menuBtn.getBoundingClientRect();
+  dropdown.style.top   = `${rect.bottom + 6}px`;
+  dropdown.style.right = `${window.innerWidth - rect.right}px`;
+
+  document.body.appendChild(dropdown);
+  activeDropdown = dropdown;
+}
+
+function closeActiveDropdown() {
+  if (activeDropdown) {
+    activeDropdown.remove();
+    activeDropdown = null;
+  }
+}
+
+document.addEventListener("click", closeActiveDropdown);
 
 //Operaciones sobre tareas
 
