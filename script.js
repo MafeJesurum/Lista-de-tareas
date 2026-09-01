@@ -99,3 +99,34 @@ function createColumnElement(col) {
   colEl.append(header, list);
   return colEl;
 }
+
+//Operaciones sobre tareas
+
+function addTask(text) {
+  if (columns.length === 0) return;
+  tasks.push({ id: nextTaskId++, text: text.trim(), column: columns[0].id });
+  renderBoard();
+}
+
+function deleteTask(taskId) {
+  tasks = tasks.filter((t) => t.id !== taskId);
+  renderBoard();
+}
+
+//Formulario de nueva tarea
+
+const taskForm  = document.getElementById("taskForm");
+const taskInput = document.getElementById("taskInput");
+
+taskForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const text = taskInput.value;
+  if (!text.trim()) return;
+  addTask(text);
+  taskInput.value = "";
+  taskInput.focus();
+});
+
+//Arranque
+
+renderBoard();
