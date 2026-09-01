@@ -10,10 +10,20 @@
 const STORAGE_KEY = "cuc-demo-tasks";
 
 const taskForm = document.getElementById("taskForm");
-const taskInput = document.getElementById("taskInput");
-const taskListElement = document.getElementById("taskList");
-const taskCounter = document.getElementById("taskCounter");
-const emptyState = document.getElementById("emptyState");
+const taskModal = document.getElementById("taskModal");
+const openTaskModal = document.getElementById("openTaskModal");
+const closeTaskModal = document.getElementById("closeTaskModal");
+const cancelTask = document.getElementById("cancelTask");
+const taskTitle = document.getElementById("taskTitle");
+const taskDescription = document.getElementById("taskDescription");
+const taskLabel = document.getElementById("taskLabel");
+const taskColor = document.getElementById("taskColor");
+const todoList = document.getElementById("todoList");
+const progressList = document.getElementById("progressList");
+const completedList = document.getElementById("completedList");
+const todoCounter = document.getElementById("todoCounter");
+const progressCounter = document.getElementById("progressCounter");
+const completedCounter = document.getElementById("completedCounter");
 
 let taskList = loadTasks();
 
@@ -33,94 +43,93 @@ function saveTasks() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(taskList));
 }
 
+function openModal() {
+  taskModal.classList.add("show");
+  taskModal.setAttribute("aria-hidden", "false");
+  taskTitle.focus();
+}
+
+function closeModal() {
+  taskModal.classList.remove("show");
+  taskModal.setAttribute("aria-hidden", "true");
+  taskForm.reset();
+  taskColor.value = "#2f6f4f";
+}
 /**
  * Agrega una nueva tarea a partir del texto ingresado.
  */
 function addTask(taskText) {
   const newTask = {
     id: Date.now(),
-    text: taskText.trim(),
-    done: false,
+    title: taskTitle.value.trim(),
+    description: taskDescription.value.trim(),
+    label: taskLabel.value.trim(),
+    color: taskColor.value,
+    status: "todo", // Estado inicial de la tarea
   };
 
   taskList.push(newTask);
   saveTasks();
   renderTasks();
+  closeModal();
 }
 
-/**
- * Cambia el estado (completada / pendiente) de una tarea.
- */
-function toggleTaskDone(taskId) {
-  taskList = taskList.map((task) =>
-    task.id === taskId ? { ...task, done: !task.done } : task
-  );
-  saveTasks();
-  renderTasks();
-}
-
-/**
- * Elimina una tarea de la lista.
- */
-function deleteTask(taskId) {
-  taskList = taskList.filter((task) => task.id !== taskId);
-  saveTasks();
-  renderTasks();
-}
-
-/**
- * Crea el elemento <li> correspondiente a una tarea.
- */
 function createTaskElement(task) {
-  const item = document.createElement("li");
-  item.className = task.done ? "task-item task-item-done" : "task-item";
+  const card= document.createElement("article");
+  card.className = "task-card";
+  card.dataset.id = task.id;
 
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.className = "task-item-checkbox";
-  checkbox.checked = task.done;
-  checkbox.addEventListener("change", () => toggleTaskDone(task.id));
+  const title = document.createElement("h3");
+  title.textContent = task.title;
 
+  const description = document.createElement("p");
+  description.textContent = task.description || "sin descripción";
+  
   const label = document.createElement("span");
-  label.className = "task-item-label";
-  label.textContent = task.text;
+  label.className = "task-label";
+  label.textContent = task.label;
+  label.style.backgroundColor = task.color;
 
-  const deleteButton = document.createElement("button");
-  deleteButton.type = "button";
-  deleteButton.className = "task-item-delete";
-  deleteButton.setAttribute("aria-label", "Eliminar tarea");
-  deleteButton.textContent = "✕";
-  deleteButton.addEventListener("click", () => deleteTask(task.id));
+  card.append(title, description, label);
 
-  item.append(checkbox, label, deleteButton);
-  return item;
+  return card;
 }
 
-/**
- * Vuelve a dibujar la lista completa de tareas en pantalla.
- */
 function renderTasks() {
-  taskListElement.innerHTML = "";
+  todoList.innerHTML = "";
+  progressList.innerHTML = "";
+  completedList.innerHTML = "";
+
+  let todoCount = 0;
+  let progressCount = 0;
+  let completedCount = 0;
 
   taskList.forEach((task) => {
-    taskListElement.appendChild(createTaskElement(task));
-  });
+    const card = createTaskElement(task);
+    if (task.status === "todo") {
+      todoList.appendChild(card);
+      todoCount++;
+    } else if (task.status === "progress") {
+      progressList.appendChild(card);
+      progressCount++;
+    } else if (task.status === "completed") {
+      completedList.appendChild(card);
+      completedCount++;
+    }
+    });
 
-  const pendingCount = taskList.filter((task) => !task.done).length;
-  taskCounter.textContent = `${pendingCount} tarea${pendingCount === 1 ? "" : "s"}`;
-
-  emptyState.style.display = taskList.length === 0 ? "block" : "none";
+  todoCounter.textContent = todoCount;
+  progressCounter.textContent = progressCount;
+  completedCounter.textContent = completedCount;
 }
+
+openTaskModal.addEventListener("click", openModal);
+closeTaskModal.addEventListener("click", closeModal);
+cancelTask.addEventListener("click", closeModal);
 
 taskForm.addEventListener("submit", (event) => {
   event.preventDefault();
-
-  const taskText = taskInput.value;
-  if (!taskText.trim()) return;
-
-  addTask(taskText);
-  taskInput.value = "";
-  taskInput.focus();
+  addTask();
 });
 
 renderTasks();
