@@ -35,7 +35,7 @@ body {
 }
 
 .app-container {
-  max-width: 560px;
+  max-width: 1120px;
   margin: 0 auto;
   padding: 3rem 1.5rem 4rem;
 }
@@ -343,14 +343,214 @@ body {
   word-break: break-word;
 }
 
-/* ---------- Responsive ---------- */
+.task-item-tag {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 99px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #fff;
+  align-self: flex-start;
+}
 
-@media (max-width: 480px) {
-  .app-title {
-    font-size: 2rem;
-  }
+/*Menú de columna*/
 
-  .task-form {
+.dropdown {
+  position: fixed;
+  z-index: 1000;
+  min-width: 200px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  padding: 0.4rem 0;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.55rem 1rem;
+  border: none;
+  background: none;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: var(--color-bg);
+}
+
+.dropdown-item-danger {
+  color: var(--color-danger);
+}
+
+.dropdown-item-danger:hover {
+  background-color: #fbeceb;
+}
+
+.dropdown-label {
+  margin: 0.4rem 1rem 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.dropdown-sep {
+  margin: 0.4rem 0;
+  border: none;
+  border-top: 1px solid var(--color-border);
+}
+
+/*Swatches de color*/
+
+.swatch-row {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.25rem 1rem 0.5rem;
+  flex-wrap: wrap;
+}
+
+.swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  cursor: pointer;
+  font-size: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: var(--color-muted);
+  transition: transform 0.1s ease, border-color 0.1s ease;
+}
+
+.swatch:hover {
+  transform: scale(1.2);
+  border-color: var(--color-accent);
+}
+
+.swatch-active {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent);
+}
+
+/*Modal*/
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+
+.modal {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
+  width: 100%;
+  max-width: 420px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.modal-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.modal-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.35rem;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.modal-input:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.modal-textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.modal-color {
+  width: 48px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 2px;
+  cursor: pointer;
+  background: var(--color-surface);
+}
+
+.modal-text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+/*Footer*/
+
+.app-footer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.app-footer p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+/*Responsive*/
+
+@media (max-width: 768px) {
+  .board {
     flex-direction: column;
   }
 }
