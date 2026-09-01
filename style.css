@@ -4,6 +4,8 @@
    btn-primary, empty-state...), tal como vimos en la Clase 3.
    ========================================================== */
 
+/*Variables y base*/
+
 :root {
   --color-bg: #f6f5f2;
   --color-surface: #ffffff;
@@ -33,12 +35,12 @@ body {
 }
 
 .app-container {
-  max-width: 560px;
+  max-width: 1120px;
   margin: 0 auto;
   padding: 3rem 1.5rem 4rem;
 }
 
-/* ---------- Header ---------- */
+/*Header*/
 
 .app-header {
   margin-bottom: 2rem;
@@ -67,7 +69,7 @@ body {
   font-size: 0.95rem;
 }
 
-/* ---------- Formulario ---------- */
+/*Formulario de nueva tarea*/
 
 .task-form {
   display: flex;
@@ -91,6 +93,8 @@ body {
   outline-offset: 1px;
 }
 
+/*Botones globales*/
+
 .btn-primary {
   padding: 0.75rem 1.3rem;
   border: none;
@@ -113,32 +117,7 @@ body {
   outline-offset: 2px;
 }
 
-/* ---------- Panel de tareas ---------- */
-
-.task-panel {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-}
-
-.task-panel-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.task-panel-title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-}
-
-.task-counter {
-  font-size: 0.8rem;
-  color: var(--color-muted);
-}
+/*Tarjetas*/
 
 .task-list {
   list-style: none;
@@ -197,16 +176,7 @@ body {
   background-color: #fbeceb;
 }
 
-.empty-state {
-  display: none;
-  margin: 0.5rem 0 0;
-  padding: 1.5rem 0;
-  text-align: center;
-  color: var(--color-muted);
-  font-size: 0.9rem;
-}
-
-/* ---------- Footer ---------- */
+/*Footer*/
 
 .app-footer {
   margin-top: 2rem;
@@ -219,7 +189,7 @@ body {
   color: var(--color-muted);
 }
 
-/* ---------- Responsive ---------- */
+/*Responsive*/
 
 @media (max-width: 480px) {
   .app-title {
