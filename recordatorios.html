@@ -1,40 +1,171 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Registro</title>
+
+    <style>
+        /* Diseño general de la página */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Tarjeta del formulario */
+        .contenedor {
+            width: 90%;
+            max-width: 450px;
+
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+            text-align: center;
+        }
+
+        /* Título */
+        h1 {
+            color: #e75480;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .descripcion {
+            color: #777;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        /* Grupos de campos */
+        .campo {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+
+            border: 2px solid #ddd;
+            border-radius: 10px;
+
+            font-size: 16px;
+
+            outline: none;
+            transition: 0.3s;
+        }
+
+        /* Efecto al seleccionar un campo */
+        input:focus {
+            border-color: #e75480;
+            box-shadow: 0 0 8px rgba(231, 84, 128, 0.3);
+        }
+
+        /* Botón */
+        button {
+            width: 100%;
+            padding: 14px;
+
+            background: linear-gradient(135deg, #e75480, #ff8fab);
+            color: white;
+
+            border: none;
+            border-radius: 10px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* Efecto al pasar el mouse */
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(231, 84, 128, 0.3);
+        }
+
+        /* Pie del formulario */
+        .pie {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #999;
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>Registro</h1>
+    <div class="contenedor">
 
-    <form id="formulario-registro">
+        <h1>✨ Registro</h1>
 
-        <label for="nombre">Nombre:</label>
-        <input
-            type="text"
-            id="nombre"
-            name="nombre"
-            required
-        >
+        <p class="descripcion">
+            Completa tus datos para registrarte
+        </p>
 
-        <br><br>
+        <form id="formulario-registro">
 
-        <label for="email">Correo electrónico:</label>
-        <input
-            type="email"
-            id="email"
-            name="email"
-            required
-        >
+            <div class="campo">
+                <label for="nombre">👤 Nombre</label>
 
-        <br><br>
+                <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    placeholder="Escribe tu nombre"
+                    required
+                >
+            </div>
 
-        <button type="submit">Enviar</button>
 
-    </form>
+            <div class="campo">
+                <label for="email">📧 Correo electrónico</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="ejemplo@correo.com"
+                    required
+                >
+            </div>
+
+
+            <button type="submit">
+                Enviar registro 🚀
+            </button>
+
+        </form>
+
+        <p class="pie">
+            Tus datos serán enviados correctamente.
+        </p>
+
+    </div>
 
 
     <!-- Librería de EmailJS -->
@@ -76,6 +207,7 @@
                 }, function(error) {
 
                     alert("Error al enviar los datos 😢");
+
                     console.log(error);
 
                 });
@@ -86,3 +218,4 @@
 
 </body>
 </html>
+```
