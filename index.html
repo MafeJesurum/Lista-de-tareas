@@ -18,61 +18,38 @@
       <p class="app-subtitle">Una app pequeña, sin frameworks, lista para desplegar en Netlify.</p>
     </header>
 
-    <div class="board-header">
-      <button id="openTaskModal" class="btn-primary">+ Agregar tarea</button>
-    </div>
+    <form id="taskForm" class="task-form">
+      <input
+        id="taskInput"
+        class="task-input"
+        type="text"
+        placeholder="Escribe una tarea nueva..."
+        autocomplete="off"
+        required
+      />
+      <button type="submit" class="btn-primary">Agregar</button>
+    </form>
 
     <section class="task-panel">
       <div class="task-panel-header">
-        <h2 class="task-panel-title">Tareas</h2>
-        <span id="taskCounter" class="task-counter">0</span>
+        <h2 class="task-panel-title">Pendientes</h2>
+        <span id="taskCounter" class="task-counter">0 tareas</span>
       </div>
+
       <ul id="taskList" class="task-list"></ul>
+
       <p id="emptyState" class="empty-state">
         No tienes tareas todavía. Agrega la primera arriba ↑
       </p>
     </section>
 
     <footer class="app-footer">
-      <p>Hecho para la clase de Buenas Prácticas de Desarrollo de Software · CUC</p>
+      <p>
+        Hecho para la clase de Buenas Prácticas de Desarrollo de Software · CUC
+      </p>
     </footer>
 
   </main>
-
-  <!-- Modal para agregar / editar tarea -->
-  <div id="taskModal" class="modal" aria-hidden="true">
-    <div class="modal-backdrop"></div>
-    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="TaskModalTitle">
-      <div class="modal-header">
-        <h2 id="TaskModalTitle" class="modal-title">Agregar Tarea</h2>
-        <button id="closeTaskModal" class="modal-close" aria-label="Cerrar">&times;</button>
-      </div>
-      <form id="taskForm" class="modal-form">
-        <div class="form-group">
-          <label for="taskTitle">Título *</label>
-          <input id="taskTitle" type="text" class="task-input" placeholder="¿Qué hay que hacer?" required autocomplete="off" />
-        </div>
-        <div class="form-group">
-          <label for="taskDescription">Descripción</label>
-          <textarea id="taskDescription" class="task-input" placeholder="Detalles opcionales..." rows="3"></textarea>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="taskLabel">Etiqueta</label>
-            <input id="taskLabel" type="text" class="task-input" placeholder="Ej. urgente" />
-          </div>
-          <div class="form-group form-group--color">
-            <label for="taskColor">Color</label>
-            <input id="taskColor" type="color" value="#2f6f4f" />
-          </div>
-        </div>
-        <div class="modal-actions">
-          <button type="button" id="cancelTask" class="btn-secondary">Cancelar</button>
-          <button type="submit" class="btn-primary">Guardar</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
   <script src="script.js"></script>
 </body>
