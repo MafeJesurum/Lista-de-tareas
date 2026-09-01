@@ -84,6 +84,12 @@ function renderBoard() {
   const board = document.getElementById("board");
   board.innerHTML = "";
   columns.forEach((col) => board.appendChild(createColumnElement(col)));
+
+  const addBtn = document.createElement("button");
+  addBtn.className = "btn-add-column";
+  addBtn.textContent = "+ Añadir columna";
+  addBtn.addEventListener("click", addColumn);
+  board.appendChild(addBtn);
 }
 
 function createColumnElement(col) {
@@ -297,6 +303,75 @@ function openModal(modalEl) {
 function closeModal() {
   const overlay = document.querySelector(".modal-overlay");
   if (overlay) overlay.remove();
+}
+
+function openAddColumnModal() {
+  let selectedColor = null;
+
+  const modal = document.createElement("div");
+  modal.className = "modal";
+  modal.addEventListener("click", (e) => e.stopPropagation());
+
+  const title = document.createElement("h3");
+  title.className = "modal-title";
+  title.textContent = "Nueva columna";
+
+  const body = document.createElement("div");
+  body.className = "modal-body";
+
+  const nameLabel = document.createElement("label");
+  nameLabel.className = "modal-label";
+  nameLabel.textContent = "Nombre";
+
+  const nameInput = document.createElement("input");
+  nameInput.type = "text";
+  nameInput.className = "modal-input";
+  nameInput.placeholder = "Ej: Revisión, Bloqueadas...";
+  nameInput.maxLength = 40;
+
+  const colorLabel = document.createElement("span");
+  colorLabel.className = "modal-label";
+  colorLabel.textContent = "Color de fondo";
+
+  const swatchRow = buildSwatchRow(null, (value) => {
+    selectedColor = value;
+  });
+
+  body.append(nameLabel, nameInput, colorLabel, swatchRow);
+
+  const footer = document.createElement("div");
+  footer.className = "modal-footer";
+
+  const cancelBtn = document.createElement("button");
+  cancelBtn.type = "button";
+  cancelBtn.className = "btn-secondary";
+  cancelBtn.textContent = "Cancelar";
+  cancelBtn.addEventListener("click", closeModal);
+
+  const createBtn = document.createElement("button");
+  createBtn.type = "button";
+  createBtn.className = "btn-primary";
+  createBtn.textContent = "Crear columna";
+  createBtn.addEventListener("click", () => {
+    const name = nameInput.value.trim() || "Nueva columna";
+    const colId = `c${nextColId++}`;
+    columns.push({ id: colId, name, color: selectedColor });
+    renderBoard();
+    closeModal();
+  });
+
+  nameInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") createBtn.click();
+  });
+
+  footer.append(cancelBtn, createBtn);
+  modal.append(title, body, footer);
+  openModal(modal);
+  setTimeout(() => nameInput.focus(), 0);
+}
+
+function addColumn() {
+  openAddColumnModal();
 }
 
 document.addEventListener("keydown", (e) => {
