@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mis Tareas — Demo Netlify</title>
+  <title>Lista de Tareas CUC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
@@ -14,8 +14,8 @@
 
     <header class="app-header">
       <p class="app-eyebrow">Buenas Prácticas · Demo de despliegue</p>
-      <h1 class="app-title">Mis Tareas</h1>
-      <p class="app-subtitle">Una app pequeña, sin frameworks, lista para desplegar en Netlify.</p>
+      <h1 class="app-title">Lista de Tareas CUC</h1>
+      <p class="app-subtitle">Tablero estilo Trello</p>
     </header>
 
     <form id="taskForm" class="task-form">
@@ -30,23 +30,10 @@
       <button type="submit" class="btn-primary">Agregar</button>
     </form>
 
-    <section class="task-panel">
-      <div class="task-panel-header">
-        <h2 class="task-panel-title">Pendientes</h2>
-        <span id="taskCounter" class="task-counter">0 tareas</span>
-      </div>
-
-      <ul id="taskList" class="task-list"></ul>
-
-      <p id="emptyState" class="empty-state">
-        No tienes tareas todavía. Agrega la primera arriba ↑
-      </p>
-    </section>
+    <div class="board" id="board"></div>
 
     <footer class="app-footer">
-      <p>
-        Hecho para la clase de Buenas Prácticas de Desarrollo de Software · CUC
-      </p>
+      <p>Hecho para la clase de Buenas Prácticas de Desarrollo de Software · CUC</p>
     </footer>
 
   </main>
