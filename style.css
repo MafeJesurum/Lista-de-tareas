@@ -503,6 +503,12 @@ body {
 
 /*Responsive*/
 
+@media (max-width: 768px) {
+  .board {
+    flex-direction: column;
+  }
+}
+
 @media (max-width: 480px) {
   .app-title {
     font-size: 2rem;
