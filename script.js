@@ -374,6 +374,59 @@ function addColumn() {
   openAddColumnModal();
 }
 
+function openDeleteColumnModal(col) {
+  const colTasks = tasks.filter((t) => t.column === col.id);
+
+  const modal = document.createElement("div");
+  modal.className = "modal";
+  modal.addEventListener("click", (e) => e.stopPropagation());
+
+  const title = document.createElement("h3");
+  title.className = "modal-title";
+  title.textContent = "Eliminar columna";
+
+  const body = document.createElement("div");
+  body.className = "modal-body";
+
+  const msg = document.createElement("p");
+  msg.className = "modal-text";
+  msg.innerHTML =
+    colTasks.length > 0
+      ? `La columna <strong>"${col.name}"</strong> tiene ${colTasks.length} tarea(s). Si la eliminas, esas tareas también se perderán. Esta acción no se puede deshacer.`
+      : `¿Eliminar la columna <strong>"${col.name}"</strong>? Esta acción no se puede deshacer.`;
+
+  body.appendChild(msg);
+
+  const footer = document.createElement("div");
+  footer.className = "modal-footer";
+
+  const cancelBtn = document.createElement("button");
+  cancelBtn.type = "button";
+  cancelBtn.className = "btn-secondary";
+  cancelBtn.textContent = "Cancelar";
+  cancelBtn.addEventListener("click", closeModal);
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.type = "button";
+  deleteBtn.className = "btn-danger";
+  deleteBtn.textContent = "Eliminar";
+  deleteBtn.addEventListener("click", () => {
+    tasks = tasks.filter((t) => t.column !== col.id);
+    columns = columns.filter((c) => c.id !== col.id);
+    renderBoard();
+    closeModal();
+  });
+
+  footer.append(cancelBtn, deleteBtn);
+  modal.append(title, body, footer);
+  openModal(modal);
+}
+
+function deleteColumn(colId) {
+  const col = columns.find((c) => c.id === colId);
+  if (col) openDeleteColumnModal(col);
+}
+
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeModal();
 });
