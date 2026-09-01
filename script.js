@@ -61,3 +61,41 @@ function createTaskElement(task) {
   item.append(label, deleteButton);
   return item;
 }
+
+//Renderizado
+
+function renderBoard() {
+  const board = document.getElementById("board");
+  board.innerHTML = "";
+  columns.forEach((col) => board.appendChild(createColumnElement(col)));
+}
+
+function createColumnElement(col) {
+  const colEl = document.createElement("div");
+  colEl.className = "column";
+  colEl.id = `col-${col.id}`;
+  colEl.dataset.column = col.id;
+  if (col.color) colEl.style.backgroundColor = col.color;
+
+  const header = document.createElement("div");
+  header.className = "column-header";
+
+  const title = document.createElement("h2");
+  title.className = "column-title";
+  title.textContent = col.name;
+
+  const counter = document.createElement("span");
+  counter.className = "column-counter";
+  counter.textContent = tasks.filter((t) => t.column === col.id).length;
+
+  header.append(title, counter);
+
+  const list = document.createElement("ul");
+  list.className = "task-list";
+  tasks
+    .filter((t) => t.column === col.id)
+    .forEach((task) => list.appendChild(createTaskElement(task)));
+
+  colEl.append(header, list);
+  return colEl;
+}
