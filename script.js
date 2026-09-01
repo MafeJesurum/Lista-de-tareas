@@ -74,6 +74,29 @@ function addTask(taskText) {
   closeModal();
 }
 
+function editTask(taskId) {
+  const taskToEdit = taskList.find((item) => item.id === taskId);
+  if (!task) {
+    return
+  }
+
+  const newTitle = prompt("Editar título de la tarea:", taskToEdit.title);
+  if (newTitle === null) {
+    return; // El usuario canceló la edición
+  }
+  const newDescription = prompt("Editar descripción de la tarea:", taskToEdit.description);
+  if (newTitle.trim() === "") {
+    alert("El título no puede estar vacío.");
+    return;
+  }
+
+  taskToEdit.title = newTitle.trim();
+  taskToEdit.description = newDescription ? newDescription.trim() : "";
+  saveTasks();
+  renderTasks();
+}
+
+
 function createTaskElement(task) {
   const card= document.createElement("article");
   card.className = "task-card";
@@ -90,7 +113,17 @@ function createTaskElement(task) {
   label.textContent = task.label;
   label.style.backgroundColor = task.color;
 
-  card.append(title, description, label);
+  const actions = document.createElement("div");
+  actions.className= "task-card-actions";
+
+  const editButton= document.createElement("button");
+  editButton.type= "button";
+  editButton.className = "edit-task";
+  editButton.textContent = "Editar";
+  editButton.addEventListener("click", () => editTask(task.id));
+
+  actions.appendChild(editButton);
+  card.appendChild(title, description, label, actions);
 
   return card;
 }
