@@ -168,6 +168,14 @@ function openColumnMenu(col, colEl, menuBtn) {
   dropdown.className = "dropdown";
   dropdown.addEventListener("click", (e) => e.stopPropagation());
 
+  const editBtn = document.createElement("button");
+  editBtn.className = "dropdown-item";
+  editBtn.textContent = "Editar nombre";
+  editBtn.addEventListener("click", () => {
+    closeActiveDropdown();
+    startRenameColumn(col, colEl);
+  });
+
   const sep = document.createElement("hr");
   sep.className = "dropdown-sep";
 
@@ -179,7 +187,7 @@ function openColumnMenu(col, colEl, menuBtn) {
     deleteColumn(col.id);
   });
 
-  dropdown.append(sep, deleteBtn);
+  dropdown.append(editBtn, sep, deleteBtn);
 
   const rect = menuBtn.getBoundingClientRect();
   dropdown.style.top   = `${rect.bottom + 6}px`;
@@ -187,6 +195,43 @@ function openColumnMenu(col, colEl, menuBtn) {
 
   document.body.appendChild(dropdown);
   activeDropdown = dropdown;
+}
+
+function startRenameColumn(col, colEl) {
+  const titleEl = colEl.querySelector(".column-title");
+  if (!titleEl) return;
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.className = "column-title-input";
+  input.value = col.name;
+  titleEl.replaceWith(input);
+  input.focus();
+  input.select();
+
+  let committed = false;
+
+  function commit() {
+    if (committed) return;
+    committed = true;
+    renameColumn(col.id, input.value);
+  }
+
+  input.addEventListener("blur", commit);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter")  { e.preventDefault(); commit(); }
+    if (e.key === "Escape") { committed = true; renderBoard(); }
+  });
+}
+
+function renameColumn(colId, newName) {
+  const trimmed = newName.trim();
+  if (trimmed) {
+    columns = columns.map((c) =>
+      c.id === colId ? { ...c, name: trimmed } : c
+    );
+  }
+  renderBoard();
 }
 
 function closeActiveDropdown() {
