@@ -19,6 +19,8 @@ const PRESET_COLORS = [
   { label: "Morado",    value: "#ede9fe" },
 ];
 
+const DEFAULT_TASK_COLOR = "#2f6f4f";
+
 //Estado inicial
 
 let columns = [
@@ -28,13 +30,13 @@ let columns = [
 ];
 
 let tasks = [
-  { id: 1, text: "Definir estructura del proyecto",        column: "done"        },
-  { id: 2, text: "Crear tablero HTML y CSS base",          column: "done"        },
-  { id: 3, text: "Implementar drag & drop entre columnas", column: "in-progress" },
-  { id: 4, text: "Conectar repositorio a Netlify",         column: "in-progress" },
-  { id: 5, text: "Escribir pruebas de integración",        column: "todo"        },
-  { id: 6, text: "Revisar accesibilidad del tablero",      column: "todo"        },
-  { id: 7, text: "Documentar convenciones del equipo",     column: "todo"        },
+  { id: 1, title: "Definir estructura del proyecto",        description: "",                          label: "",        color: DEFAULT_TASK_COLOR, column: "done"        },
+  { id: 2, title: "Crear tablero HTML y CSS base",          description: "",                          label: "",        color: DEFAULT_TASK_COLOR, column: "done"        },
+  { id: 3, title: "Implementar drag & drop entre columnas", description: "Usar la API nativa de HTML5", label: "técnico", color: "#2563eb",          column: "in-progress" },
+  { id: 4, title: "Conectar repositorio a Netlify",         description: "",                          label: "deploy",  color: DEFAULT_TASK_COLOR, column: "in-progress" },
+  { id: 5, title: "Escribir pruebas de integración",        description: "",                          label: "",        color: DEFAULT_TASK_COLOR, column: "todo"        },
+  { id: 6, title: "Revisar accesibilidad del tablero",      description: "",                          label: "a11y",    color: "#7c3aed",          column: "todo"        },
+  { id: 7, title: "Documentar convenciones del equipo",     description: "",                          label: "",        color: DEFAULT_TASK_COLOR, column: "todo"        },
 ];
 
 let nextTaskId     = 8;
@@ -49,9 +51,22 @@ function createTaskElement(task) {
   item.className = "task-item";
   item.dataset.taskId = String(task.id);
 
-  const label = document.createElement("span");
-  label.className = "task-item-label";
-  label.textContent = task.text;
+  const top = document.createElement("div");
+  top.className = "task-item-top";
+
+  const titleEl = document.createElement("span");
+  titleEl.className = "task-item-title";
+  titleEl.textContent = task.title;
+
+  const actions = document.createElement("div");
+  actions.className = "task-item-actions";
+
+  const editButton = document.createElement("button");
+  editButton.type = "button";
+  editButton.className = "task-item-edit";
+  editButton.setAttribute("aria-label", "Editar tarea");
+  editButton.textContent = "✎";
+  editButton.addEventListener("click", () => openEditTaskModal(task));
 
   const deleteButton = document.createElement("button");
   deleteButton.type = "button";
@@ -60,7 +75,24 @@ function createTaskElement(task) {
   deleteButton.textContent = "✕";
   deleteButton.addEventListener("click", () => deleteTask(task.id));
 
-  item.append(label, deleteButton);
+  actions.append(editButton, deleteButton);
+  top.append(titleEl, actions);
+  item.appendChild(top);
+
+  if (task.description) {
+    const desc = document.createElement("p");
+    desc.className = "task-item-desc";
+    desc.textContent = task.description;
+    item.appendChild(desc);
+  }
+
+  if (task.label) {
+    const tag = document.createElement("span");
+    tag.className = "task-item-tag";
+    tag.textContent = task.label;
+    tag.style.backgroundColor = task.color || DEFAULT_TASK_COLOR;
+    item.appendChild(tag);
+  }
 
   item.draggable = true;
 
@@ -305,6 +337,175 @@ function closeModal() {
   if (overlay) overlay.remove();
 }
 
+function buildTaskModal({ modalTitle, task, onSave }) {
+  const modal = document.createElement("div");
+  modal.className = "modal";
+  modal.addEventListener("click", (e) => e.stopPropagation());
+
+  const titleEl = document.createElement("h3");
+  titleEl.className = "modal-title";
+  titleEl.textContent = modalTitle;
+
+  const body = document.createElement("div");
+  body.className = "modal-body";
+
+  const titleLabel = document.createElement("label");
+  titleLabel.className = "modal-label";
+  titleLabel.textContent = "Título *";
+
+  const titleInput = document.createElement("input");
+  titleInput.type = "text";
+  titleInput.className = "modal-input";
+  titleInput.placeholder = "¿Qué hay que hacer?";
+  titleInput.maxLength = 120;
+  titleInput.required = true;
+  titleInput.value = task ? task.title : "";
+
+  const descLabel = document.createElement("label");
+  descLabel.className = "modal-label";
+  descLabel.textContent = "Descripción";
+
+  const descInput = document.createElement("textarea");
+  descInput.className = "modal-input modal-textarea";
+  descInput.placeholder = "Detalles opcionales...";
+  descInput.rows = 3;
+  descInput.value = task ? task.description : "";
+
+  const labelLabel = document.createElement("label");
+  labelLabel.className = "modal-label";
+  labelLabel.textContent = "Etiqueta";
+
+  const labelInput = document.createElement("input");
+  labelInput.type = "text";
+  labelInput.className = "modal-input";
+  labelInput.placeholder = "Ej. urgente, técnico...";
+  labelInput.maxLength = 30;
+  labelInput.value = task ? task.label : "";
+
+  const colorLabel = document.createElement("label");
+  colorLabel.className = "modal-label";
+  colorLabel.textContent = "Color de etiqueta";
+
+  const colorInput = document.createElement("input");
+  colorInput.type = "color";
+  colorInput.className = "modal-color";
+  colorInput.value = task ? task.color : DEFAULT_TASK_COLOR;
+
+  body.append(titleLabel, titleInput, descLabel, descInput, labelLabel, labelInput, colorLabel, colorInput);
+
+  if (!task) {
+    const colLabel = document.createElement("label");
+    colLabel.className = "modal-label";
+    colLabel.textContent = "Columna";
+
+    const colSelect = document.createElement("select");
+    colSelect.className = "modal-input";
+    columns.forEach((col) => {
+      const opt = document.createElement("option");
+      opt.value = col.id;
+      opt.textContent = col.name;
+      colSelect.appendChild(opt);
+    });
+
+    body.append(colLabel, colSelect);
+
+    const footer = document.createElement("div");
+    footer.className = "modal-footer";
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.type = "button";
+    cancelBtn.className = "btn-secondary";
+    cancelBtn.textContent = "Cancelar";
+    cancelBtn.addEventListener("click", closeModal);
+
+    const saveBtn = document.createElement("button");
+    saveBtn.type = "button";
+    saveBtn.className = "btn-primary";
+    saveBtn.textContent = "Guardar";
+    saveBtn.addEventListener("click", () => {
+      const title = titleInput.value.trim();
+      if (!title) { titleInput.focus(); return; }
+      onSave({
+        title,
+        description: descInput.value.trim(),
+        label:       labelInput.value.trim(),
+        color:       colorInput.value,
+        column:      colSelect.value,
+      });
+    });
+
+    titleInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") saveBtn.click();
+    });
+
+    footer.append(cancelBtn, saveBtn);
+    modal.append(titleEl, body, footer);
+    openModal(modal);
+    setTimeout(() => titleInput.focus(), 0);
+    return;
+  }
+
+  const footer = document.createElement("div");
+  footer.className = "modal-footer";
+
+  const cancelBtn = document.createElement("button");
+  cancelBtn.type = "button";
+  cancelBtn.className = "btn-secondary";
+  cancelBtn.textContent = "Cancelar";
+  cancelBtn.addEventListener("click", closeModal);
+
+  const saveBtn = document.createElement("button");
+  saveBtn.type = "button";
+  saveBtn.className = "btn-primary";
+  saveBtn.textContent = "Guardar";
+  saveBtn.addEventListener("click", () => {
+    const title = titleInput.value.trim();
+    if (!title) { titleInput.focus(); return; }
+    onSave({
+      title,
+      description: descInput.value.trim(),
+      label:       labelInput.value.trim(),
+      color:       colorInput.value,
+    });
+  });
+
+  titleInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") saveBtn.click();
+  });
+
+  footer.append(cancelBtn, saveBtn);
+  modal.append(titleEl, body, footer);
+  openModal(modal);
+  setTimeout(() => titleInput.focus(), 0);
+}
+
+function openCreateTaskModal() {
+  if (columns.length === 0) return;
+  buildTaskModal({
+    modalTitle: "Agregar tarea",
+    task: null,
+    onSave: ({ title, description, label, color, column }) => {
+      tasks.push({ id: nextTaskId++, title, description, label, color, column });
+      renderBoard();
+      closeModal();
+    },
+  });
+}
+
+function openEditTaskModal(task) {
+  buildTaskModal({
+    modalTitle: "Editar tarea",
+    task,
+    onSave: ({ title, description, label, color }) => {
+      tasks = tasks.map((t) =>
+        t.id === task.id ? { ...t, title, description, label, color } : t
+      );
+      renderBoard();
+      closeModal();
+    },
+  });
+}
+
 function openAddColumnModal() {
   let selectedColor = null;
 
@@ -433,30 +634,14 @@ document.addEventListener("keydown", (e) => {
 
 //Operaciones sobre tareas
 
-function addTask(text) {
-  if (columns.length === 0) return;
-  tasks.push({ id: nextTaskId++, text: text.trim(), column: columns[0].id });
-  renderBoard();
-}
-
 function deleteTask(taskId) {
   tasks = tasks.filter((t) => t.id !== taskId);
   renderBoard();
 }
 
-//Formulario de nueva tarea
+//Botón de agregar tarea
 
-const taskForm  = document.getElementById("taskForm");
-const taskInput = document.getElementById("taskInput");
-
-taskForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const text = taskInput.value;
-  if (!text.trim()) return;
-  addTask(text);
-  taskInput.value = "";
-  taskInput.focus();
-});
+document.getElementById("addTaskBtn").addEventListener("click", openCreateTaskModal);
 
 //Arranque
 

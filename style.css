@@ -69,28 +69,12 @@ body {
   font-size: 0.95rem;
 }
 
-/*Formulario de nueva tarea*/
+/*Botón de agregar tarea*/
 
-.task-form {
+.board-actions {
   display: flex;
-  gap: 0.6rem;
-  margin-bottom: 2rem;
-}
-
-.task-input {
-  flex: 1;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  background: var(--color-surface);
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  color: var(--color-text);
-}
-
-.task-input:focus {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 1px;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
 }
 
 /*Botones globales*/
@@ -275,8 +259,8 @@ body {
 
 .task-item {
   display: flex;
-  align-items: center;
-  gap: 0.7rem;
+  flex-direction: column;
+  gap: 0.4rem;
   padding: 0.7rem 0.6rem;
   border-radius: 8px;
   background: var(--color-surface);
@@ -300,10 +284,39 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-.task-item-label {
+.task-item-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.task-item-title {
   flex: 1;
   font-size: 0.9rem;
+  font-weight: 500;
   word-break: break-word;
+}
+
+.task-item-actions {
+  display: flex;
+  gap: 0.1rem;
+  flex-shrink: 0;
+}
+
+.task-item-edit {
+  border: none;
+  background: none;
+  color: var(--color-muted);
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.2rem 0.35rem;
+  border-radius: 6px;
+}
+
+.task-item-edit:hover {
+  color: var(--color-accent);
+  background-color: var(--color-bg);
 }
 
 .task-item-delete {
@@ -313,13 +326,31 @@ body {
   font-size: 1.1rem;
   line-height: 1;
   cursor: pointer;
-  padding: 0.2rem 0.4rem;
+  padding: 0.2rem 0.35rem;
   border-radius: 6px;
 }
 
 .task-item-delete:hover {
   color: var(--color-danger);
   background-color: #fbeceb;
+}
+
+.task-item-desc {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.task-item-tag {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 99px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #fff;
+  align-self: flex-start;
 }
 
 /*Menú de columna*/
@@ -429,7 +460,7 @@ body {
   border-radius: var(--radius);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
   padding: 1.75rem;
   display: flex;
   flex-direction: column;
@@ -475,6 +506,21 @@ body {
   outline-offset: 1px;
 }
 
+.modal-textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.modal-color {
+  width: 48px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 2px;
+  cursor: pointer;
+  background: var(--color-surface);
+}
+
 .modal-text {
   margin: 0;
   font-size: 0.95rem;
@@ -512,9 +558,5 @@ body {
 @media (max-width: 480px) {
   .app-title {
     font-size: 2rem;
-  }
-
-  .task-form {
-    flex-direction: column;
   }
 }
