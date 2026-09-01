@@ -187,7 +187,16 @@ function openColumnMenu(col, colEl, menuBtn) {
     deleteColumn(col.id);
   });
 
-  dropdown.append(editBtn, sep, deleteBtn);
+  const colorLabel = document.createElement("p");
+  colorLabel.className = "dropdown-label";
+  colorLabel.textContent = "Color de fondo";
+
+  const swatchRow = buildSwatchRow(col.color, (value) => {
+    setColumnColor(col.id, value);
+    closeActiveDropdown();
+  });
+
+  dropdown.append(editBtn, colorLabel, swatchRow, sep, deleteBtn);
 
   const rect = menuBtn.getBoundingClientRect();
   dropdown.style.top   = `${rect.bottom + 6}px`;
@@ -195,6 +204,36 @@ function openColumnMenu(col, colEl, menuBtn) {
 
   document.body.appendChild(dropdown);
   activeDropdown = dropdown;
+}
+
+function buildSwatchRow(activeColor, onSelect) {
+  const row = document.createElement("div");
+  row.className = "swatch-row";
+
+  PRESET_COLORS.forEach(({ label, value }) => {
+    const swatch = document.createElement("button");
+    swatch.type = "button";
+    swatch.className = "swatch" + (activeColor === value ? " swatch-active" : "");
+    swatch.title = label;
+    swatch.style.background = value || "#fff";
+    if (!value) swatch.textContent = "✕";
+    swatch.addEventListener("click", () => {
+      row.querySelectorAll(".swatch").forEach((s) =>
+        s.classList.toggle("swatch-active", s === swatch)
+      );
+      onSelect(value);
+    });
+    row.appendChild(swatch);
+  });
+
+  return row;
+}
+
+function setColumnColor(colId, color) {
+  columns = columns.map((c) =>
+    c.id === colId ? { ...c, color } : c
+  );
+  renderBoard();
 }
 
 function startRenameColumn(col, colEl) {
