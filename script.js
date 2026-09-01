@@ -282,6 +282,27 @@ function closeActiveDropdown() {
 
 document.addEventListener("click", closeActiveDropdown);
 
+//Modales
+
+function openModal(modalEl) {
+  const overlay = document.createElement("div");
+  overlay.className = "modal-overlay";
+  overlay.appendChild(modalEl);
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) closeModal();
+  });
+  document.body.appendChild(overlay);
+}
+
+function closeModal() {
+  const overlay = document.querySelector(".modal-overlay");
+  if (overlay) overlay.remove();
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeModal();
+});
+
 //Operaciones sobre tareas
 
 function addTask(text) {
