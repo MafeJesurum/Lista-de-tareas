@@ -37,8 +37,9 @@ let tasks = [
   { id: 7, text: "Documentar convenciones del equipo",     column: "todo"        },
 ];
 
-let nextTaskId = 8;
-let nextColId  = 1;
+let nextTaskId    = 8;
+let nextColId     = 1;
+let draggedTaskId = null;
 
 //Tarjetas
 
@@ -59,6 +60,20 @@ function createTaskElement(task) {
   deleteButton.addEventListener("click", () => deleteTask(task.id));
 
   item.append(label, deleteButton);
+
+  item.draggable = true;
+
+  item.addEventListener("dragstart", (e) => {
+    draggedTaskId = task.id;
+    e.dataTransfer.effectAllowed = "move";
+    setTimeout(() => item.classList.add("dragging"), 0);
+  });
+
+  item.addEventListener("dragend", () => {
+    draggedTaskId = null;
+    item.classList.remove("dragging");
+  });
+
   return item;
 }
 
