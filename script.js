@@ -96,6 +96,16 @@ function editTask(taskId) {
   renderTasks();
 }
 
+function deleteTask(taskId) {
+  const confirmDelete = confirm("¿Estás seguro de que deseas eliminar esta tarea?");
+  if (!confirmDelete) {
+    return; // El usuario canceló la eliminación
+  }
+  
+  taskList = taskList.filter((task) => task.id !== taskId);
+  saveTasks();
+  renderTasks();
+}
 
 function createTaskElement(task) {
   const card= document.createElement("article");
@@ -121,8 +131,15 @@ function createTaskElement(task) {
   editButton.className = "edit-task";
   editButton.textContent = "Editar";
   editButton.addEventListener("click", () => editTask(task.id));
-
   actions.appendChild(editButton);
+  
+  const deleteButton= document.createElement("button");
+  deleteButton.type= "button";
+  deleteButton.className = "delete-task";
+  deleteButton.textContent = "Eliminar";
+  deleteButton.addEventListener("click", () => deleteTask(task.id));
+  actions.appendChild(deleteButton);
+
   card.appendChild(title, description, label, actions);
 
   return card;
