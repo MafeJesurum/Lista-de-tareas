@@ -2,12 +2,12 @@
  * script.js
  *
  * Convención de nombres (Clase 3):
- *  - variables y funciones en camelCase       -> taskList, addTask()
- *  - constantes en MAYUSCULAS_CON_GUION_BAJO  -> STORAGE_KEY
+ *  - variables y funciones en camelCase       -> tasks, addTask()
+ *  - constantes en MAYUSCULAS_CON_GUION_BAJO  -> PRESET_COLORS
  *  - nombres descriptivos, nada de x, data1, temp...
  */
 
-const STORAGE_KEY = "cuc-demo-tasks";
+//Constantes
 
 const taskForm = document.getElementById("taskForm");
 const taskInput = document.getElementById("taskInput");
@@ -112,8 +112,8 @@ function renderTasks() {
   emptyState.style.display = taskList.length === 0 ? "block" : "none";
 }
 
-taskForm.addEventListener("submit", (event) => {
-  event.preventDefault();
+function openDeleteColumnModal(col) {
+  const colTasks = tasks.filter((t) => t.column === col.id);
 
   const taskText = taskInput.value;
   if (!taskText.trim()) return;
@@ -123,4 +123,17 @@ taskForm.addEventListener("submit", (event) => {
   taskInput.focus();
 });
 
-renderTasks();
+//Operaciones sobre tareas
+
+function deleteTask(taskId) {
+  tasks = tasks.filter((t) => t.id !== taskId);
+  renderBoard();
+}
+
+//Botón de agregar tarea
+
+document.getElementById("addTaskBtn").addEventListener("click", openCreateTaskModal);
+
+//Arranque
+
+renderBoard();

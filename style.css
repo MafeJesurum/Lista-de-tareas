@@ -4,6 +4,8 @@
    btn-primary, empty-state...), tal como vimos en la Clase 3.
    ========================================================== */
 
+/*Variables y base*/
+
 :root {
   --color-bg: #f6f5f2;
   --color-surface: #ffffff;
@@ -38,7 +40,7 @@ body {
   padding: 3rem 1.5rem 4rem;
 }
 
-/* ---------- Header ---------- */
+/*Header*/
 
 .app-header {
   margin-bottom: 2rem;
@@ -67,29 +69,15 @@ body {
   font-size: 0.95rem;
 }
 
-/* ---------- Formulario ---------- */
+/*Botón de agregar tarea*/
 
-.task-form {
+.board-actions {
   display: flex;
-  gap: 0.6rem;
-  margin-bottom: 2rem;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
 }
 
-.task-input {
-  flex: 1;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  background: var(--color-surface);
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  color: var(--color-text);
-}
-
-.task-input:focus {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 1px;
-}
+/*Botones globales*/
 
 .btn-primary {
   padding: 0.75rem 1.3rem;
@@ -113,32 +101,152 @@ body {
   outline-offset: 2px;
 }
 
-/* ---------- Panel de tareas ---------- */
-
-.task-panel {
-  background: var(--color-surface);
+.btn-secondary {
+  padding: 0.65rem 1.1rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  padding: 1.5rem;
+  background: transparent;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
 }
 
-.task-panel-header {
+.btn-secondary:hover {
+  background-color: var(--color-bg);
+}
+
+.btn-danger {
+  padding: 0.65rem 1.1rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--color-danger);
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.btn-danger:hover {
+  opacity: 0.88;
+}
+
+/*Columnas*/
+
+.board {
   display: flex;
-  align-items: baseline;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.column {
+  flex: 1;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  min-height: 220px;
+  transition: border-color 0.15s ease;
+}
+
+.column.drag-over {
+  border-color: var(--color-accent);
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
-.task-panel-title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 1.1rem;
+.column-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
 }
 
-.task-counter {
-  font-size: 0.8rem;
+.column-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.column-title-input {
+  flex: 1;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  border: 1px solid var(--color-accent);
+  border-radius: 6px;
+  padding: 0.1rem 0.4rem;
+  outline: none;
+  background: var(--color-surface);
+  min-width: 0;
+}
+
+.column-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 99px;
+  background: var(--color-bg);
+  font-size: 0.75rem;
+  font-weight: 600;
   color: var(--color-muted);
 }
+
+.btn-column-menu {
+  border: none;
+  background: none;
+  color: var(--color-muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.15rem 0.35rem;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+}
+
+.btn-column-menu:hover {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.btn-add-column {
+  flex-shrink: 0;
+  width: 220px;
+  align-self: flex-start;
+  padding: 1rem;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-add-column:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/*Tarjetas*/
 
 .task-list {
   list-style: none;
@@ -151,34 +259,64 @@ body {
 
 .task-item {
   display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.7rem 0.5rem;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.7rem 0.6rem;
   border-radius: 8px;
-  transition: background-color 0.15s ease;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  cursor: grab;
+  transition: background-color 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
 }
 
 .task-item:hover {
   background-color: var(--color-bg);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
-.task-item-checkbox {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--color-accent);
-  cursor: pointer;
-  flex-shrink: 0;
+.task-item:active {
+  cursor: grabbing;
 }
 
-.task-item-label {
+.task-item.dragging {
+  opacity: 0.45;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.task-item-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.task-item-title {
   flex: 1;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  font-weight: 500;
   word-break: break-word;
 }
 
-.task-item-done .task-item-label {
+.task-item-actions {
+  display: flex;
+  gap: 0.1rem;
+  flex-shrink: 0;
+}
+
+.task-item-edit {
+  border: none;
+  background: none;
   color: var(--color-muted);
-  text-decoration: line-through;
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.2rem 0.35rem;
+  border-radius: 6px;
+}
+
+.task-item-edit:hover {
+  color: var(--color-accent);
+  background-color: var(--color-bg);
 }
 
 .task-item-delete {
@@ -188,7 +326,7 @@ body {
   font-size: 1.1rem;
   line-height: 1;
   cursor: pointer;
-  padding: 0.2rem 0.4rem;
+  padding: 0.2rem 0.35rem;
   border-radius: 6px;
 }
 
@@ -197,26 +335,12 @@ body {
   background-color: #fbeceb;
 }
 
-.empty-state {
-  display: none;
-  margin: 0.5rem 0 0;
-  padding: 1.5rem 0;
-  text-align: center;
-  color: var(--color-muted);
-  font-size: 0.9rem;
-}
-
-/* ---------- Footer ---------- */
-
-.app-footer {
-  margin-top: 2rem;
-  text-align: center;
-}
-
-.app-footer p {
+.task-item-desc {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--color-muted);
+  line-height: 1.4;
+  word-break: break-word;
 }
 
 /* ---------- Responsive ---------- */
@@ -228,5 +352,11 @@ body {
 
   .task-form {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-title {
+    font-size: 2rem;
   }
 }
