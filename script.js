@@ -25,6 +25,7 @@ const todoCounter = document.getElementById("todoCounter");
 const progressCounter = document.getElementById("progressCounter");
 const completedCounter = document.getElementById("completedCounter");
 
+let editingTaskId = null;
 let taskList = loadTasks();
 
 /**
@@ -43,10 +44,24 @@ function saveTasks() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(taskList));
 }
 
-function openModal() {
+function openModal(task=null) {
   taskModal.classList.add("show");
   taskModal.setAttribute("aria-hidden", "false");
   taskTitle.focus();
+  if (task) {
+    editingTaskId = task.id;
+    document.getElementById("TaskModalTitle").textContent = "Editar Tarea";
+  taskTitle.value = task.title;
+  taskDescription.value = task.description;
+  taskLabel.value = task.label;
+  taskColor.value = task.color;
+  } else {
+    editingTaskId = null;
+    document.getElementById("TaskModalTitle").textContent = "Agregar Tarea";
+    taskForm.reset();
+    taskColor.value = "#2f6f4f"; // Color por defecto
+  }
+  taskModalTitle.focus();
 }
 
 function closeModal() {
@@ -54,6 +69,7 @@ function closeModal() {
   taskModal.setAttribute("aria-hidden", "true");
   taskForm.reset();
   taskColor.value = "#2f6f4f";
+  editingTaskId = null;
 }
 /**
  * Agrega una nueva tarea a partir del texto ingresado.
@@ -76,9 +92,11 @@ function addTask(taskText) {
 
 function editTask(taskId) {
   const taskToEdit = taskList.find((item) => item.id === taskId);
-  if (!task) {
-    return
+  if (!taskToEdit) {
+    return;
   }
+  openModal(taskToEdit);
+}
 
   const newTitle = prompt("Editar título de la tarea:", taskToEdit.title);
   if (newTitle === null) {
@@ -94,7 +112,7 @@ function editTask(taskId) {
   taskToEdit.description = newDescription ? newDescription.trim() : "";
   saveTasks();
   renderTasks();
-}
+
 
 function deleteTask(taskId) {
   const confirmDelete = confirm("¿Estás seguro de que deseas eliminar esta tarea?");
@@ -179,7 +197,26 @@ cancelTask.addEventListener("click", closeModal);
 
 taskForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  addTask();
+  const title = taskTitle.value.trim();
+  if (!title) {
+    alert("El título de la tarea no puede estar vacío.");
+    return;
+  }
+  if (editingTaskId !== null) {
+    const taskToEdit = taskList.find((item) => item.id === editingTaskId);
+    if (taskToEdit) {
+      taskToEdit.title = title;
+      taskToEdit.description = taskDescription.value.trim();
+      taskToEdit.label = taskLabel.value;
+      taskToEdit.color = taskColor.value;
+    }
+  } else {
+    addTask();
+    return;
+  }
+  saveTasks();
+  renderTasks();
+  closeModal();
 });
 
 renderTasks();
