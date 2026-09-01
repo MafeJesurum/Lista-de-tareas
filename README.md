@@ -1,72 +1,37 @@
-# Mis Tareas — Demo de despliegue
+# Lista de Tareas CUC
 
-Proyecto de ejemplo para la asignatura **Buenas Prácticas de Desarrollo de Software** (CUC).
+Tablero de tareas estilo Trello, simplificado. Permite organizar tareas en columnas (Por Hacer, En Progreso, Completadas), moverlas entre estados y gestionarlas visualmente sin necesidad de cuenta ni backend.
 
-Es una lista de tareas sencilla, hecha con **HTML, CSS y JavaScript puro** (sin frameworks
-ni pasos de build), pensada para que el docente la use como demo en clase y luego cada
-equipo repita el mismo flujo con su propio proyecto.
+## Alcance
 
-## Estructura del proyecto
+Este proyecto es una aplicación web (HTML, CSS y JavaScript), sin inicio de sesión ni persistencia de datos: toda la información vive en memoria mientras el usuario tiene la página abierta, y se reinicia al recargar.
 
-```
-demo-lista-tareas/
-├── index.html      # estructura de la página
-├── style.css        # estilos (clases en kebab-case)
-├── script.js        # lógica de la app (variables/funciones en camelCase)
-├── netlify.toml      # configuración de despliegue
-└── README.md
-```
+## Integrantes
 
-## Cómo usarlo como demo en clase
+- Valery Celedón
+- Mafe Jesurum
+- Benjamín Urrea
 
-### 1. Subir el proyecto a GitHub (rama `main`)
+## Funcionalidades principales
 
-```bash
-git init
-git add .
-git commit -m "feat: primera versión de la app de tareas"
-git branch -M main
-git remote add origin https://github.com/tu-usuario/demo-lista-tareas.git
-git push -u origin main
-```
+1. **Gestión de tareas (CRUD de tarjetas)**
+   Crear, editar y eliminar tareas dentro de una columna, con título, descripción y etiqueta/color asignados. Incluye el formulario/modal de "Añadir tarea".
 
-### 2. Desplegar en Netlify
+2. **Tablero y movimiento entre columnas (Drag & Drop)**
+   Estructura de columnas (Por Hacer, En Progreso, Completadas), arrastre de tarjetas entre columnas y actualización automática del contador de tareas por columna.
 
-1. Entra a [app.netlify.com](https://app.netlify.com) → **Add new site → Import from Git**.
-2. Elige GitHub y autoriza el acceso.
-3. Selecciona el repositorio `demo-lista-tareas`.
-4. Branch a desplegar: **main**.
-5. Build command: (vacío) — Publish directory: `.`
-6. **Deploy site**. En unos segundos tendrás una URL pública funcionando.
+3. **Estado visual y recordatorios por correo**
+   Etiquetas de color por categoría, estilo diferenciado para tareas completadas, y recordatorio por correo electrónico por tarjeta (mediante EmailJS) para avisar sobre tareas próximas a vencer. El envío depende de que la aplicación esté abierta en el navegador, dado que el proyecto no cuenta con backend.
 
-### 3. Ver la integración continua en acción
+## Tecnologías
 
-Haz un cambio pequeño (por ejemplo, el texto del `<h1>` en `index.html`), confírmalo y
-súbelo a `main`:
+- HTML5
+- CSS3
+- JavaScript (vanilla)
 
-```bash
-git add .
-git commit -m "docs: ajusta el título de la app"
-git push
-```
+## Estructura de ramas
 
-Netlify vuelve a desplegar el sitio automáticamente — sin tocar nada en su panel.
-
-## Para los estudiantes: cómo replicarlo con su proyecto
-
-El objetivo no es copiar esta app, sino repetir el mismo proceso con el proyecto de su
-equipo:
-
-1. Revisen los nombres de sus variables, funciones y archivos (Clase 3).
-2. Confirmen sus cambios con mensajes tipo `feat:`, `fix:`, `refactor:`...
-3. Suban su rama, abran su Pull Request hacia `dev`.
-4. Cuando el proyecto esté listo en `main`, conéctenlo a Netlify siguiendo los mismos
-   pasos de esta guía.
-5. Compartan la URL pública de su equipo.
-
-## Funcionalidad de la app
-
-- Agregar tareas nuevas.
-- Marcarlas como completadas.
-- Eliminarlas.
-- Las tareas se guardan en el navegador (`localStorage`), así que no se pierden al recargar.
+- `main` — versión estable, desplegada en producción.
+- `dev` — integración del trabajo diario del equipo.
+- `pruebas` — rama de pruebas.
+- `feature/nombre-integrante` — una por integrante, para el desarrollo de su funcionalidad.
