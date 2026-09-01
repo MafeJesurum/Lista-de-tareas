@@ -9,59 +9,55 @@
 
 const STORAGE_KEY = "cuc-demo-tasks";
 
-const taskForm = document.getElementById("taskForm");
-const taskModal = document.getElementById("taskModal");
-const openTaskModal = document.getElementById("openTaskModal");
-const closeTaskModal = document.getElementById("closeTaskModal");
-const cancelTask = document.getElementById("cancelTask");
-const taskTitle = document.getElementById("taskTitle");
+const taskForm        = document.getElementById("taskForm");
+const taskModal       = document.getElementById("taskModal");
+const openTaskModal   = document.getElementById("openTaskModal");
+const closeTaskModal  = document.getElementById("closeTaskModal");
+const cancelTask      = document.getElementById("cancelTask");
+const taskTitle       = document.getElementById("taskTitle");
 const taskDescription = document.getElementById("taskDescription");
-const taskLabel = document.getElementById("taskLabel");
-const taskColor = document.getElementById("taskColor");
-const todoList = document.getElementById("todoList");
-const progressList = document.getElementById("progressList");
-const completedList = document.getElementById("completedList");
-const todoCounter = document.getElementById("todoCounter");
-const progressCounter = document.getElementById("progressCounter");
-const completedCounter = document.getElementById("completedCounter");
+const taskLabel       = document.getElementById("taskLabel");
+const taskColor       = document.getElementById("taskColor");
+const taskListEl      = document.getElementById("taskList");
+const taskCounter     = document.getElementById("taskCounter");
+const emptyState      = document.getElementById("emptyState");
 
 let editingTaskId = null;
-let taskList = loadTasks();
+let tasks = loadTasks();
 
 /**
  * Lee las tareas guardadas en localStorage.
  * Si no hay nada guardado, devuelve una lista vacía.
  */
 function loadTasks() {
-  const storedTasks = localStorage.getItem(STORAGE_KEY);
-  return storedTasks ? JSON.parse(storedTasks) : [];
+  const stored = localStorage.getItem(STORAGE_KEY);
+  return stored ? JSON.parse(stored) : [];
 }
 
 /**
  * Guarda la lista de tareas actual en localStorage.
  */
 function saveTasks() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(taskList));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
 }
 
-function openModal(task=null) {
+function openModal(task = null) {
   taskModal.classList.add("show");
   taskModal.setAttribute("aria-hidden", "false");
-  taskTitle.focus();
   if (task) {
     editingTaskId = task.id;
     document.getElementById("TaskModalTitle").textContent = "Editar Tarea";
-  taskTitle.value = task.title;
-  taskDescription.value = task.description;
-  taskLabel.value = task.label;
-  taskColor.value = task.color;
+    taskTitle.value       = task.title;
+    taskDescription.value = task.description;
+    taskLabel.value       = task.label;
+    taskColor.value       = task.color;
   } else {
     editingTaskId = null;
     document.getElementById("TaskModalTitle").textContent = "Agregar Tarea";
     taskForm.reset();
-    taskColor.value = "#2f6f4f"; // Color por defecto
+    taskColor.value = "#2f6f4f";
   }
-  taskModalTitle.focus();
+  taskTitle.focus();
 }
 
 function closeModal() {
@@ -71,152 +67,112 @@ function closeModal() {
   taskColor.value = "#2f6f4f";
   editingTaskId = null;
 }
+
 /**
- * Agrega una nueva tarea a partir del texto ingresado.
+ * Agrega una nueva tarea a partir de los valores del modal.
  */
-function addTask(taskText) {
+function addTask() {
   const newTask = {
-    id: Date.now(),
-    title: taskTitle.value.trim(),
+    id:          Date.now(),
+    title:       taskTitle.value.trim(),
     description: taskDescription.value.trim(),
-    label: taskLabel.value.trim(),
-    color: taskColor.value,
-    status: "todo", // Estado inicial de la tarea
+    label:       taskLabel.value.trim(),
+    color:       taskColor.value,
   };
 
-  taskList.push(newTask);
+  tasks.push(newTask);
   saveTasks();
   renderTasks();
   closeModal();
 }
 
 function editTask(taskId) {
-  const taskToEdit = taskList.find((item) => item.id === taskId);
-  if (!taskToEdit) {
-    return;
-  }
-  openModal(taskToEdit);
+  const task = tasks.find((t) => t.id === taskId);
+  if (task) openModal(task);
 }
 
-  const newTitle = prompt("Editar título de la tarea:", taskToEdit.title);
-  if (newTitle === null) {
-    return; // El usuario canceló la edición
-  }
-  const newDescription = prompt("Editar descripción de la tarea:", taskToEdit.description);
-  if (newTitle.trim() === "") {
-    alert("El título no puede estar vacío.");
-    return;
-  }
-
-  taskToEdit.title = newTitle.trim();
-  taskToEdit.description = newDescription ? newDescription.trim() : "";
-  saveTasks();
-  renderTasks();
-
-
 function deleteTask(taskId) {
-  const confirmDelete = confirm("¿Estás seguro de que deseas eliminar esta tarea?");
-  if (!confirmDelete) {
-    return; // El usuario canceló la eliminación
-  }
-  
-  taskList = taskList.filter((task) => task.id !== taskId);
+  if (!confirm("¿Estás seguro de que deseas eliminar esta tarea?")) return;
+  tasks = tasks.filter((t) => t.id !== taskId);
   saveTasks();
   renderTasks();
 }
 
 function createTaskElement(task) {
-  const card= document.createElement("article");
-  card.className = "task-card";
+  const card = document.createElement("article");
+  card.className  = "task-card";
   card.dataset.id = task.id;
 
   const title = document.createElement("h3");
   title.textContent = task.title;
 
   const description = document.createElement("p");
-  description.textContent = task.description || "sin descripción";
-  
+  description.textContent = task.description || "Sin descripción";
+
   const label = document.createElement("span");
   label.className = "task-label";
   label.textContent = task.label;
   label.style.backgroundColor = task.color;
 
   const actions = document.createElement("div");
-  actions.className= "task-card-actions";
+  actions.className = "task-card-actions";
 
-  const editButton= document.createElement("button");
-  editButton.type= "button";
+  const editButton = document.createElement("button");
+  editButton.type      = "button";
   editButton.className = "edit-task";
   editButton.textContent = "Editar";
   editButton.addEventListener("click", () => editTask(task.id));
-  actions.appendChild(editButton);
-  
-  const deleteButton= document.createElement("button");
-  deleteButton.type= "button";
+
+  const deleteButton = document.createElement("button");
+  deleteButton.type      = "button";
   deleteButton.className = "delete-task";
   deleteButton.textContent = "Eliminar";
   deleteButton.addEventListener("click", () => deleteTask(task.id));
-  actions.appendChild(deleteButton);
 
-  card.appendChild(title, description, label, actions);
+  actions.append(editButton, deleteButton);
+  card.append(title, description, label, actions);
 
   return card;
 }
 
 function renderTasks() {
-  todoList.innerHTML = "";
-  progressList.innerHTML = "";
-  completedList.innerHTML = "";
+  taskListEl.innerHTML = "";
 
-  let todoCount = 0;
-  let progressCount = 0;
-  let completedCount = 0;
+  tasks.forEach((task) => {
+    taskListEl.appendChild(createTaskElement(task));
+  });
 
-  taskList.forEach((task) => {
-    const card = createTaskElement(task);
-    if (task.status === "todo") {
-      todoList.appendChild(card);
-      todoCount++;
-    } else if (task.status === "progress") {
-      progressList.appendChild(card);
-      progressCount++;
-    } else if (task.status === "completed") {
-      completedList.appendChild(card);
-      completedCount++;
-    }
-    });
-
-  todoCounter.textContent = todoCount;
-  progressCounter.textContent = progressCount;
-  completedCounter.textContent = completedCount;
+  taskCounter.textContent = tasks.length;
+  emptyState.style.display = tasks.length === 0 ? "block" : "none";
 }
 
-openTaskModal.addEventListener("click", openModal);
+openTaskModal.addEventListener("click", () => openModal());
 closeTaskModal.addEventListener("click", closeModal);
 cancelTask.addEventListener("click", closeModal);
 
 taskForm.addEventListener("submit", (event) => {
   event.preventDefault();
+
   const title = taskTitle.value.trim();
   if (!title) {
     alert("El título de la tarea no puede estar vacío.");
     return;
   }
+
   if (editingTaskId !== null) {
-    const taskToEdit = taskList.find((item) => item.id === editingTaskId);
-    if (taskToEdit) {
-      taskToEdit.title = title;
-      taskToEdit.description = taskDescription.value.trim();
-      taskToEdit.label = taskLabel.value;
-      taskToEdit.color = taskColor.value;
+    const task = tasks.find((t) => t.id === editingTaskId);
+    if (task) {
+      task.title       = title;
+      task.description = taskDescription.value.trim();
+      task.label       = taskLabel.value.trim();
+      task.color       = taskColor.value;
     }
+    saveTasks();
+    renderTasks();
+    closeModal();
   } else {
     addTask();
-    return;
   }
-  saveTasks();
-  renderTasks();
-  closeModal();
 });
 
 renderTasks();
