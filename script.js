@@ -39,3 +39,25 @@ let tasks = [
 
 let nextTaskId = 8;
 let nextColId  = 1;
+
+//Tarjetas
+
+function createTaskElement(task) {
+  const item = document.createElement("li");
+  item.className = "task-item";
+  item.dataset.taskId = String(task.id);
+
+  const label = document.createElement("span");
+  label.className = "task-item-label";
+  label.textContent = task.text;
+
+  const deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.className = "task-item-delete";
+  deleteButton.setAttribute("aria-label", "Eliminar tarea");
+  deleteButton.textContent = "✕";
+  deleteButton.addEventListener("click", () => deleteTask(task.id));
+
+  item.append(label, deleteButton);
+  return item;
+}
