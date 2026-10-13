@@ -41,3 +41,5 @@ Este proyecto es una aplicación web (HTML, CSS y JavaScript), sin inicio de ses
 | Integrante | URL del sitio | Bucket publico | Bucket privado |
 |---|---|---|---|
 |Benjamin Urrea | http://cuc-bp-eq81-urrea-sitio-2026.s3-website-us-east-1.amazonaws.com | cuc-bp-eq81-urrea-sitio-2026 | cuc-bp-eq81-urrea-privado-2026 |
+|Valery Celedon | http://cuc-bp-eq81-celedon-sitio-2026.s3-website-us-east-1.amazonaws.com/ | cuc-bp-eq81-celedon-sitio-2026
+ | cuc-bp-eq81-celedon-privado-2026 |
