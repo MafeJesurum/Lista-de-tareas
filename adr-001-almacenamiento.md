@@ -1,5 +1,6 @@
 # ADR-001: Diseño del almacenamiento del proyecto en Amazon S3
 - Fecha: 20-10-2026
+- Autor: Mafe Jesurum
 - Autor: Benjamin Urrea
 - Estado: Aceptada
 ## Contexto
@@ -13,6 +14,7 @@ Se usan dos buckets en US East (N. Virginia):
   `retencion-sitio`: pasa a Standard-IA a los 30 días, a Glacier a los 90 días y elimina versiones no vigentes
   a los 365 días.
 - Bucket privado: acceso público bloqueado, versionado activado y organizado en los prefijos
+  `archivos-sitio/`, `data-usuarios/`, `registros-actividad/`, `archivos-adjuntos-t/`  y `respaldos-info/`.
   `db/`, `respaldos/`, `adjuntos/` y `logs/`.
 ## Alternativas consideradas
 - Mantener el sitio en Netlify: no ofrece almacenamiento privado ni control de versionado y ciclo de vida.
