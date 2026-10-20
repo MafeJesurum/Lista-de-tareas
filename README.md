@@ -35,3 +35,11 @@ Este proyecto es una aplicación web (HTML, CSS y JavaScript), sin inicio de ses
 - `dev` — integración del trabajo diario del equipo.
 - `pruebas` — rama de pruebas.
 - `feature/nombre-integrante` — una por integrante, para el desarrollo de su funcionalidad.
+
+## Despliegue en AWS
+
+| Integrante | URL del sitio | Bucket publico | Bucket privado |
+|---|---|---|---|
+|Benjamin Urrea | http://cuc-bp-eq81-urrea-sitio-2026.s3-website-us-east-1.amazonaws.com | cuc-bp-eq81-urrea-sitio-2026 | cuc-bp-eq81-urrea-privado-2026 |
+|Valery Celedon | http://cuc-bp-eq81-celedon-sitio-2026.s3-website-us-east-1.amazonaws.com | cuc-bp-eq81-celedon-sitio-2026 | cuc-bp-eq81-celedon-privado-2026 |
+|Mafe Jesurum | http://cuc-bp-eq81-jesurum-sitio-2026.s3-website-us-east-1.amazonaws.com | cuc-bp-eq81-jesurum-sitio-2026 | cuc-bp-eq81-jesurum-privado-2026 |
