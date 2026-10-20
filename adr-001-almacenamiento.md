@@ -1,6 +1,7 @@
 # ADR-001: Diseño del almacenamiento del proyecto en Amazon S3
 - Fecha: 20-10-2026
 - Autor: Mafe Jesurum
+- Autor: Benjamin Urrea
 - Estado: Aceptada
 ## Contexto
 El proyecto "Lista de Tareas CUC" es un tablero de tareas publicado como sitio estático en un bucket de S3. 
@@ -14,6 +15,7 @@ Se usan dos buckets en US East (N. Virginia):
   a los 365 días.
 - Bucket privado: acceso público bloqueado, versionado activado y organizado en los prefijos
   `archivos-sitio/`, `data-usuarios/`, `registros-actividad/`, `archivos-adjuntos-t/`  y `respaldos-info/`.
+  `db/`, `respaldos/`, `adjuntos/` y `logs/`.
 ## Alternativas consideradas
 - Mantener el sitio en Netlify: no ofrece almacenamiento privado ni control de versionado y ciclo de vida.
 - Un solo bucket para todo: si es público expone los datos de usuarios; si es privado, el sitio no carga.
