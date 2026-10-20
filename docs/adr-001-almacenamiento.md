@@ -1,6 +1,3 @@
-
-
-
 ```markdown
 # ADR-001: Diseño del almacenamiento del proyecto en Amazon S3- Fecha: 20/10/2026- Autor: Valery Celedón- Estado: Aceptada
 
