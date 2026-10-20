@@ -1,5 +1,6 @@
 Aquí tienes el contenido completo y exacto para tu archivo **`adr-001-almacenamiento.md`**, adaptado perfectamente a tus datos y a la captura de pantalla de tu regla en AWS (`retencion-sitio`):
 
+
 ```markdown
 # ADR-001: Diseño del almacenamiento del proyecto en Amazon S3- Fecha: 20/10/2026- Autor: Valery Celedón- Estado: Aceptada
 
