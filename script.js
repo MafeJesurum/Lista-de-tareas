@@ -623,3 +623,45 @@ document.getElementById("addTaskBtn").addEventListener("click", openCreateTaskMo
 //Arranque
 
 renderBoard();
+
+// ==========================================================
+// API HTTP - CLASE 10 (SEÑAL 1: Corrección de código repetido DRY)
+// ==========================================================
+
+const http = require('http');
+const d = [4.5, 3.5, 2.5, 4.0];
+
+// AQUÍ ESTÁ EL CAMBIO DE LA SEÑAL 1:
+// Se crea esta función helper para unificar writeHead y end
+function responder(res, codigoEstado, datos) {
+  res.writeHead(codigoEstado, { 'Content-Type': 'application/json; charset=utf-8' });
+  res.end(JSON.stringify(datos, null, 2));
+}
+
+const s = http.createServer((req, res) => {
+  if (req.url === '/salud') {
+    responder(res, 200, { estado: 'ok' });
+    return;
+  }
+
+  if (req.url === '/equipo') {
+    responder(res, 200, {
+      equipo: 'Equipo 81',
+      integrantes: ['Valery Celedón', 'Mafe Jesurum', 'Benjamín Urrea']
+    });
+    return;
+  }
+
+  if (req.url === '/notas') {
+    let t = 0;
+    for (let i = 0; i < d.length; i++) { t = t + d[i]; }
+    let p = t / d.length;
+    responder(res, 200, { promedio: p, aprobado: p >= 3.0 });
+    return;
+  }
+
+  // Ruta por defecto (404)
+  responder(res, 404, { error: 'Ruta no encontrada' });
+});
+
+s.listen(80);
