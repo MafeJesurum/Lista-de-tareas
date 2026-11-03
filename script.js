@@ -623,3 +623,73 @@ document.getElementById("addTaskBtn").addEventListener("click", openCreateTaskMo
 //Arranque
 
 renderBoard();
+
+// ==========================================================
+// API HTTP - CLASE 10 (SEÑALES 1, 2, 3 y 4: DRY, separación, funciones pequeñas y renombre de constantes sueltas)
+// ==========================================================
+
+const http = require('http');
+
+// AQUÍ ESTÁ EL CAMBIO DE LA SEÑAL 2 (datos):
+// Las notas y el equipo quedan aparte de la lógica y de las respuestas
+const notas = [4.5, 3.5, 2.5, 4.0];
+const NOTA_MINIMA = 3.0;
+
+const datosEquipo = {
+  equipo: 'Equipo 81',
+  integrantes: ['Valery Celedón', 'Mafe Jesurum', 'Benjamín Urrea']
+};
+
+// AQUÍ ESTÁ EL CAMBIO DE LA SEÑAL 2 (lógica):
+// Estas funciones calculan las reglas sin saber nada de HTTP
+function calcularPromedio(notas) {
+  let suma = 0;
+  for (const nota of notas) { suma = suma + nota; }
+  return suma / notas.length;
+}
+
+function estaAprobado(promedio) {
+  return promedio >= NOTA_MINIMA;
+}
+
+// AQUÍ ESTÁ EL CAMBIO DE LA SEÑAL 1:
+// Se crea esta función helper para unificar writeHead y end
+function responder(res, codigoEstado, datos) {
+  res.writeHead(codigoEstado, { 'Content-Type': 'application/json; charset=utf-8' });
+  res.end(JSON.stringify(datos, null, 2));
+}
+
+// AQUÍ ESTÁ EL CAMBIO DE LA SEÑAL 3:
+// Cada ruta tiene su propia función y hace una sola cosa
+function responderSalud(res) {
+  responder(res, 200, { estado: 'ok' });
+}
+
+function responderEquipo(res) {
+  responder(res, 200, datosEquipo);
+}
+
+function responderNotas(res) {
+  const promedio = calcularPromedio(notas);
+  responder(res, 200, { promedio: promedio, aprobado: estaAprobado(promedio) });
+}
+
+// Ruta por defecto (404)
+function responderNoEncontrada(res) {
+  responder(res, 404, { error: 'Ruta no encontrada' });
+}
+
+// AQUÍ ESTÁ EL CAMBIO DE LA SEÑAL 3 (enrutamiento):
+// El servidor solo decide qué función atiende cada ruta
+const rutas = new Map([
+  ['/salud', responderSalud],
+  ['/equipo', responderEquipo],
+  ['/notas', responderNotas]
+]);
+
+const servidor = http.createServer((req, res) => {
+  const atenderRuta = rutas.get(req.url) || responderNoEncontrada;
+  atenderRuta(res);
+});
+
+servidor.listen(80);
