@@ -625,15 +625,14 @@ document.getElementById("addTaskBtn").addEventListener("click", openCreateTaskMo
 renderBoard();
 
 // ==========================================================
-// API HTTP - CLASE 10 (SEÑALES 1, 2, 3 y 4: DRY, separación, funciones pequeñas y renombre de constantes sueltas)
+// API HTTP - CLASE 10 (SEÑALES 1, 2 Y 3: DRY, separación y funciones pequeñas)
 // ==========================================================
 
 const http = require('http');
 
 // AQUÍ ESTÁ EL CAMBIO DE LA SEÑAL 2 (datos):
 // Las notas y el equipo quedan aparte de la lógica y de las respuestas
-const notas = [4.5, 3.5, 2.5, 4.0];
-const NOTA_MINIMA = 3.0;
+const d = [4.5, 3.5, 2.5, 4.0];
 
 const datosEquipo = {
   equipo: 'Equipo 81',
@@ -649,7 +648,7 @@ function calcularPromedio(notas) {
 }
 
 function estaAprobado(promedio) {
-  return promedio >= NOTA_MINIMA;
+  return promedio >= 3.0;
 }
 
 // AQUÍ ESTÁ EL CAMBIO DE LA SEÑAL 1:
@@ -670,7 +669,7 @@ function responderEquipo(res) {
 }
 
 function responderNotas(res) {
-  const promedio = calcularPromedio(notas);
+  const promedio = calcularPromedio(d);
   responder(res, 200, { promedio: promedio, aprobado: estaAprobado(promedio) });
 }
 
@@ -687,9 +686,9 @@ const rutas = new Map([
   ['/notas', responderNotas]
 ]);
 
-const servidor = http.createServer((req, res) => {
+const s = http.createServer((req, res) => {
   const atenderRuta = rutas.get(req.url) || responderNoEncontrada;
   atenderRuta(res);
 });
 
-servidor.listen(80);
+s.listen(80);
