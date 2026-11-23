@@ -3,7 +3,7 @@ import FilaColores from './FilaColores.jsx';
 
 const SEPARACION_DEL_BOTON = 6;
 
-export default function MenuColumna({ columna, botonRect, alRenombrar, alCambiarColor, alCerrar }) {
+export default function MenuColumna({ columna, botonRect, alRenombrar, alCambiarColor, alEliminar, alCerrar }) {
   useEffect(() => {
     const cerrarConEscape = (e) => {
       if (e.key === 'Escape') alCerrar();
@@ -28,6 +28,10 @@ export default function MenuColumna({ columna, botonRect, alRenombrar, alCambiar
       </button>
       <p className="dropdown-label">Color de fondo</p>
       <FilaColores colorActivo={columna.color} alElegir={alCambiarColor} />
+      <hr className="dropdown-sep" />
+      <button type="button" className="dropdown-item dropdown-item-danger" onClick={alEliminar}>
+        Eliminar columna
+      </button>
     </div>
   );
 }

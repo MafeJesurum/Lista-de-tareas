@@ -4,6 +4,7 @@ import Boton from './componentes/Boton.jsx';
 import Tablero from './componentes/Tablero.jsx';
 import ModalTarea from './componentes/ModalTarea.jsx';
 import ModalColumna from './componentes/ModalColumna.jsx';
+import ModalEliminarColumna from './componentes/ModalEliminarColumna.jsx';
 
 export default function App() {
   const tablero = useTablero();
@@ -51,6 +52,7 @@ export default function App() {
           alEditarTarea={(tarea) => setModal({ tipo: 'editarTarea', tarea })}
           alEliminarTarea={tablero.eliminarTarea}
           alEditarColumna={tablero.editarColumna}
+          alPedirEliminarColumna={(columna) => setModal({ tipo: 'eliminarColumna', columna })}
           alAgregarColumna={() => setModal({ tipo: 'crearColumna' })}
         />
       )}
@@ -76,6 +78,15 @@ export default function App() {
       {modal?.tipo === 'crearColumna' && (
         <ModalColumna
           alGuardar={(datos) => ejecutarYCerrar(() => tablero.crearColumna(datos))}
+          alCerrar={cerrarModal}
+        />
+      )}
+
+      {modal?.tipo === 'eliminarColumna' && (
+        <ModalEliminarColumna
+          columna={modal.columna}
+          cantidadTareas={tablero.tareas.filter((t) => t.column === modal.columna.id).length}
+          alConfirmar={() => ejecutarYCerrar(() => tablero.eliminarColumna(modal.columna.id))}
           alCerrar={cerrarModal}
         />
       )}

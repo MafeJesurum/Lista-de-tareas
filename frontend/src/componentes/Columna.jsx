@@ -12,6 +12,7 @@ export default function Columna({
   alEditarTarea,
   alEliminarTarea,
   alEditarColumna,
+  alPedirEliminarColumna,
 }) {
   const [resaltada, setResaltada] = useState(false);
   const [menuRect, setMenuRect] = useState(null);
@@ -59,6 +60,11 @@ export default function Columna({
   function cambiarColor(color) {
     setMenuRect(null);
     alEditarColumna(columna.id, { color });
+  }
+
+  function pedirEliminar() {
+    setMenuRect(null);
+    alPedirEliminarColumna(columna);
   }
 
   return (
@@ -116,6 +122,7 @@ export default function Columna({
           botonRect={menuRect}
           alRenombrar={empezarRenombre}
           alCambiarColor={cambiarColor}
+          alEliminar={pedirEliminar}
           alCerrar={() => setMenuRect(null)}
         />
       )}

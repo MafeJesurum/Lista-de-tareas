@@ -8,6 +8,7 @@ export default function Tablero({
   alEditarTarea,
   alEliminarTarea,
   alEditarColumna,
+  alPedirEliminarColumna,
   alAgregarColumna,
 }) {
   const [idArrastrada, setIdArrastrada] = useState(null);
@@ -31,6 +32,7 @@ export default function Tablero({
           alEditarTarea={alEditarTarea}
           alEliminarTarea={alEliminarTarea}
           alEditarColumna={alEditarColumna}
+          alPedirEliminarColumna={alPedirEliminarColumna}
         />
       ))}
       <button type="button" className="btn-add-column" onClick={alAgregarColumna}>
