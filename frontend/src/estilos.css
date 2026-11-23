@@ -157,6 +157,11 @@ body {
   background: var(--color-surface);
   border: 2px solid var(--color-border);
   border-radius: var(--radius);
+  transition: border-color 0.15s ease;
+}
+
+.column.drag-over {
+  border-color: var(--color-accent);
 }
 
 .column-header {
@@ -205,12 +210,23 @@ body {
   border-radius: 8px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  cursor: grab;
+  user-select: none;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
 }
 
 .task-item:hover {
   background-color: var(--color-bg);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.task-item:active {
+  cursor: grabbing;
+}
+
+.task-item.dragging {
+  opacity: 0.45;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .task-item-top {

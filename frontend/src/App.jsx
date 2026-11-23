@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTablero } from './hooks/useTablero.js';
 import Boton from './componentes/Boton.jsx';
 import Modal from './componentes/Modal.jsx';
-import Columna from './componentes/Columna.jsx';
+import Tablero from './componentes/Tablero.jsx';
 
 export default function App() {
   const tablero = useTablero();
@@ -35,16 +35,12 @@ export default function App() {
       {tablero.cargando ? (
         <p className="estado-carga">Cargando tablero...</p>
       ) : (
-        <div className="board">
-          {tablero.columnas.map((columna) => (
-            <Columna
-              key={columna.id}
-              columna={columna}
-              tareas={tablero.tareas.filter((t) => t.column === columna.id)}
-              alEliminarTarea={tablero.eliminarTarea}
-            />
-          ))}
-        </div>
+        <Tablero
+          columnas={tablero.columnas}
+          tareas={tablero.tareas}
+          alMoverTarea={tablero.moverTarea}
+          alEliminarTarea={tablero.eliminarTarea}
+        />
       )}
 
       {modalAbierto && (

@@ -1,8 +1,29 @@
+import { useState } from 'react';
 import { COLOR_TAREA_POR_DEFECTO } from '../constantes.js';
 
-export default function TarjetaTarea({ tarea, alEliminar }) {
+export default function TarjetaTarea({ tarea, alEliminar, alEmpezarArrastre, alTerminarArrastre }) {
+  const [arrastrando, setArrastrando] = useState(false);
+
+  function empezar(e) {
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(tarea.id));
+    alEmpezarArrastre(tarea.id);
+    // Si se marca en el mismo instante, la imagen que sigue al mouse también sale transparente.
+    setTimeout(() => setArrastrando(true), 0);
+  }
+
+  function terminar() {
+    setArrastrando(false);
+    alTerminarArrastre();
+  }
+
   return (
-    <li className="task-item">
+    <li
+      className={'task-item' + (arrastrando ? ' dragging' : '')}
+      draggable
+      onDragStart={empezar}
+      onDragEnd={terminar}
+    >
       <div className="task-item-top">
         <span className="task-item-title">{tarea.title}</span>
         <button
