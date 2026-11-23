@@ -9,6 +9,7 @@ export default function Columna({
   alSoltarTarea,
   alEmpezarArrastre,
   alTerminarArrastre,
+  alEditarTarea,
   alEliminarTarea,
   alEditarColumna,
 }) {
@@ -101,6 +102,7 @@ export default function Columna({
           <TarjetaTarea
             key={tarea.id}
             tarea={tarea}
+            alEditar={alEditarTarea}
             alEliminar={alEliminarTarea}
             alEmpezarArrastre={alEmpezarArrastre}
             alTerminarArrastre={alTerminarArrastre}

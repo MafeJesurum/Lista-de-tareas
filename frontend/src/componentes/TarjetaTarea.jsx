@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { COLOR_TAREA_POR_DEFECTO } from '../constantes.js';
 
-export default function TarjetaTarea({ tarea, alEliminar, alEmpezarArrastre, alTerminarArrastre }) {
+export default function TarjetaTarea({ tarea, alEditar, alEliminar, alEmpezarArrastre, alTerminarArrastre }) {
   const [arrastrando, setArrastrando] = useState(false);
 
   function empezar(e) {
@@ -26,14 +26,19 @@ export default function TarjetaTarea({ tarea, alEliminar, alEmpezarArrastre, alT
     >
       <div className="task-item-top">
         <span className="task-item-title">{tarea.title}</span>
-        <button
-          type="button"
-          className="task-item-delete"
-          aria-label="Eliminar tarea"
-          onClick={() => alEliminar(tarea.id)}
-        >
-          ✕
-        </button>
+        <div className="task-item-actions">
+          <button type="button" className="task-item-edit" aria-label="Editar tarea" onClick={() => alEditar(tarea)}>
+            ✎
+          </button>
+          <button
+            type="button"
+            className="task-item-delete"
+            aria-label="Eliminar tarea"
+            onClick={() => alEliminar(tarea.id)}
+          >
+            ✕
+          </button>
+        </div>
       </div>
 
       {tarea.description && <p className="task-item-desc">{tarea.description}</p>}

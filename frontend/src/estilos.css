@@ -242,8 +242,29 @@ body {
   word-break: break-word;
 }
 
-.task-item-delete {
+.task-item-actions {
+  display: flex;
+  gap: 0.1rem;
   flex-shrink: 0;
+}
+
+.task-item-edit {
+  border: none;
+  background: none;
+  color: var(--color-muted);
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.2rem 0.35rem;
+  border-radius: 6px;
+}
+
+.task-item-edit:hover {
+  color: var(--color-accent);
+  background-color: var(--color-bg);
+}
+
+.task-item-delete {
   border: none;
   background: none;
   color: var(--color-muted);
@@ -311,6 +332,52 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
+}
+
+.modal-campo {
+  display: block;
+}
+
+.modal-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.modal-input:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.modal-textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.modal-color {
+  display: block;
+  width: 48px;
+  height: 36px;
+  padding: 2px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  cursor: pointer;
 }
 
 .modal-text {

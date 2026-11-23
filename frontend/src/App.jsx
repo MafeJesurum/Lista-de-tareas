@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import { useTablero } from './hooks/useTablero.js';
 import Boton from './componentes/Boton.jsx';
-import Modal from './componentes/Modal.jsx';
 import Tablero from './componentes/Tablero.jsx';
+import ModalTarea from './componentes/ModalTarea.jsx';
 
 export default function App() {
   const tablero = useTablero();
-  const [modalAbierto, setModalAbierto] = useState(false);
-  const cerrarModal = () => setModalAbierto(false);
+  const [modal, setModal] = useState(null);
+  const cerrarModal = () => setModal(null);
+
+  async function ejecutarYCerrar(accion) {
+    const salioBien = await accion();
+    if (salioBien) cerrarModal();
+  }
 
   return (
     <main className="app-container">
@@ -27,7 +32,10 @@ export default function App() {
       )}
 
       <div className="board-actions">
-        <Boton alHacerClic={() => setModalAbierto(true)} deshabilitado={tablero.columnas.length === 0}>
+        <Boton
+          alHacerClic={() => setModal({ tipo: 'crearTarea' })}
+          deshabilitado={tablero.columnas.length === 0}
+        >
           + Agregar tarea
         </Boton>
       </div>
@@ -39,19 +47,28 @@ export default function App() {
           columnas={tablero.columnas}
           tareas={tablero.tareas}
           alMoverTarea={tablero.moverTarea}
+          alEditarTarea={(tarea) => setModal({ tipo: 'editarTarea', tarea })}
           alEliminarTarea={tablero.eliminarTarea}
           alEditarColumna={tablero.editarColumna}
         />
       )}
 
-      {modalAbierto && (
-        <Modal
-          titulo="Agregar tarea"
+      {modal?.tipo === 'crearTarea' && (
+        <ModalTarea
+          tarea={null}
+          columnas={tablero.columnas}
+          alGuardar={(datos) => ejecutarYCerrar(() => tablero.crearTarea(datos))}
           alCerrar={cerrarModal}
-          acciones={<Boton variante="secundario" alHacerClic={cerrarModal}>Cancelar</Boton>}
-        >
-          <p className="modal-text">Aquí va el formulario de la tarea.</p>
-        </Modal>
+        />
+      )}
+
+      {modal?.tipo === 'editarTarea' && (
+        <ModalTarea
+          tarea={modal.tarea}
+          columnas={tablero.columnas}
+          alGuardar={(cambios) => ejecutarYCerrar(() => tablero.editarTarea(modal.tarea.id, cambios))}
+          alCerrar={cerrarModal}
+        />
       )}
 
       <footer className="app-footer">
