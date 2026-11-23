@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Columna from './Columna.jsx';
 
-export default function Tablero({ columnas, tareas, alMoverTarea, alEliminarTarea }) {
+export default function Tablero({ columnas, tareas, alMoverTarea, alEliminarTarea, alEditarColumna }) {
   const [idArrastrada, setIdArrastrada] = useState(null);
 
   function soltarEn(idColumna) {
@@ -21,6 +21,7 @@ export default function Tablero({ columnas, tareas, alMoverTarea, alEliminarTare
           alEmpezarArrastre={setIdArrastrada}
           alTerminarArrastre={() => setIdArrastrada(null)}
           alEliminarTarea={alEliminarTarea}
+          alEditarColumna={alEditarColumna}
         />
       ))}
     </div>

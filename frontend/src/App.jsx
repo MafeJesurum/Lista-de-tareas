@@ -40,6 +40,7 @@ export default function App() {
           tareas={tablero.tareas}
           alMoverTarea={tablero.moverTarea}
           alEliminarTarea={tablero.eliminarTarea}
+          alEditarColumna={tablero.editarColumna}
         />
       )}
 

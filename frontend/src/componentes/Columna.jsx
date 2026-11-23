@@ -1,5 +1,7 @@
 import { useRef, useState } from 'react';
 import TarjetaTarea from './TarjetaTarea.jsx';
+import MenuColumna from './MenuColumna.jsx';
+import { MAX_NOMBRE_COLUMNA } from '../constantes.js';
 
 export default function Columna({
   columna,
@@ -8,8 +10,12 @@ export default function Columna({
   alEmpezarArrastre,
   alTerminarArrastre,
   alEliminarTarea,
+  alEditarColumna,
 }) {
   const [resaltada, setResaltada] = useState(false);
+  const [menuRect, setMenuRect] = useState(null);
+  const [renombrando, setRenombrando] = useState(false);
+  const [nombre, setNombre] = useState(columna.name);
   // dragenter y dragleave también se disparan al pasar sobre las tarjetas de adentro;
   // contar entradas y salidas evita que el resaltado parpadee.
   const contadorArrastre = useRef(0);
@@ -32,6 +38,28 @@ export default function Columna({
     alSoltarTarea(columna.id);
   }
 
+  function abrirMenu(e) {
+    e.stopPropagation();
+    setMenuRect(e.currentTarget.getBoundingClientRect());
+  }
+
+  function empezarRenombre() {
+    setMenuRect(null);
+    setNombre(columna.name);
+    setRenombrando(true);
+  }
+
+  function guardarNombre() {
+    setRenombrando(false);
+    const limpio = nombre.trim();
+    if (limpio && limpio !== columna.name) alEditarColumna(columna.id, { name: limpio });
+  }
+
+  function cambiarColor(color) {
+    setMenuRect(null);
+    alEditarColumna(columna.id, { color });
+  }
+
   return (
     <section
       className={'column' + (resaltada ? ' drag-over' : '')}
@@ -42,8 +70,30 @@ export default function Columna({
       onDrop={alSoltar}
     >
       <div className="column-header">
-        <h2 className="column-title">{columna.name}</h2>
-        <span className="column-counter">{tareas.length}</span>
+        {renombrando ? (
+          <input
+            className="column-title-input"
+            aria-label="Nombre de la columna"
+            value={nombre}
+            maxLength={MAX_NOMBRE_COLUMNA}
+            autoFocus
+            onChange={(e) => setNombre(e.target.value)}
+            onBlur={guardarNombre}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') e.currentTarget.blur();
+              if (e.key === 'Escape') setRenombrando(false);
+            }}
+          />
+        ) : (
+          <h2 className="column-title">{columna.name}</h2>
+        )}
+
+        <div className="column-header-right">
+          <span className="column-counter">{tareas.length}</span>
+          <button type="button" className="btn-column-menu" aria-label="Opciones de columna" onClick={abrirMenu}>
+            ⋯
+          </button>
+        </div>
       </div>
 
       <ul className="task-list">
@@ -57,6 +107,16 @@ export default function Columna({
           />
         ))}
       </ul>
+
+      {menuRect && (
+        <MenuColumna
+          columna={columna}
+          botonRect={menuRect}
+          alRenombrar={empezarRenombre}
+          alCambiarColor={cambiarColor}
+          alCerrar={() => setMenuRect(null)}
+        />
+      )}
     </section>
   );
 }
