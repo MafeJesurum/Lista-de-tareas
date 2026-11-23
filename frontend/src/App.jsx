@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTablero } from './hooks/useTablero.js';
 import Boton from './componentes/Boton.jsx';
 import Modal from './componentes/Modal.jsx';
+import TarjetaTarea from './componentes/TarjetaTarea.jsx';
 
 export default function App() {
   const tablero = useTablero();
@@ -31,7 +32,15 @@ export default function App() {
         </Boton>
       </div>
 
-      {tablero.cargando && <p className="estado-carga">Cargando tablero...</p>}
+      {tablero.cargando ? (
+        <p className="estado-carga">Cargando tablero...</p>
+      ) : (
+        <ul className="task-list">
+          {tablero.tareas.map((tarea) => (
+            <TarjetaTarea key={tarea.id} tarea={tarea} alEliminar={tablero.eliminarTarea} />
+          ))}
+        </ul>
+      )}
 
       {modalAbierto && (
         <Modal
