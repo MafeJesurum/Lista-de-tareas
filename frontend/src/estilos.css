@@ -193,6 +193,26 @@ body {
   color: var(--color-muted);
 }
 
+.btn-add-column {
+  flex-shrink: 0;
+  width: 220px;
+  padding: 1rem;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-add-column:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
 .task-list {
   list-style: none;
   margin: 0;
@@ -518,6 +538,10 @@ body {
   .board {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .btn-add-column {
+    width: 100%;
   }
 }
 

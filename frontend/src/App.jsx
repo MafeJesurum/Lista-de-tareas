@@ -3,6 +3,7 @@ import { useTablero } from './hooks/useTablero.js';
 import Boton from './componentes/Boton.jsx';
 import Tablero from './componentes/Tablero.jsx';
 import ModalTarea from './componentes/ModalTarea.jsx';
+import ModalColumna from './componentes/ModalColumna.jsx';
 
 export default function App() {
   const tablero = useTablero();
@@ -50,6 +51,7 @@ export default function App() {
           alEditarTarea={(tarea) => setModal({ tipo: 'editarTarea', tarea })}
           alEliminarTarea={tablero.eliminarTarea}
           alEditarColumna={tablero.editarColumna}
+          alAgregarColumna={() => setModal({ tipo: 'crearColumna' })}
         />
       )}
 
@@ -67,6 +69,13 @@ export default function App() {
           tarea={modal.tarea}
           columnas={tablero.columnas}
           alGuardar={(cambios) => ejecutarYCerrar(() => tablero.editarTarea(modal.tarea.id, cambios))}
+          alCerrar={cerrarModal}
+        />
+      )}
+
+      {modal?.tipo === 'crearColumna' && (
+        <ModalColumna
+          alGuardar={(datos) => ejecutarYCerrar(() => tablero.crearColumna(datos))}
           alCerrar={cerrarModal}
         />
       )}
