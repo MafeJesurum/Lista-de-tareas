@@ -1,0 +1,7 @@
+# Configuración de despliegue para Netlify.
+# Este proyecto no tiene build (es HTML/CSS/JS puro),
+# así que no hace falta comando de build.
+
+[build]
+  command = ""
+  publish = "."
