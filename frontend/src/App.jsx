@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useTablero } from './hooks/useTablero.js';
 import Boton from './componentes/Boton.jsx';
 import Modal from './componentes/Modal.jsx';
 
 export default function App() {
+  const tablero = useTablero();
   const [modalAbierto, setModalAbierto] = useState(false);
   const cerrarModal = () => setModalAbierto(false);
 
@@ -14,9 +16,22 @@ export default function App() {
         <p className="app-subtitle">Tablero estilo Trello</p>
       </header>
 
+      {tablero.error && (
+        <div className="aviso-error" role="alert">
+          <span>{tablero.error}</span>
+          <button type="button" aria-label="Cerrar aviso" onClick={tablero.cerrarError}>
+            ✕
+          </button>
+        </div>
+      )}
+
       <div className="board-actions">
-        <Boton alHacerClic={() => setModalAbierto(true)}>+ Agregar tarea</Boton>
+        <Boton alHacerClic={() => setModalAbierto(true)} deshabilitado={tablero.columnas.length === 0}>
+          + Agregar tarea
+        </Boton>
       </div>
+
+      {tablero.cargando && <p className="estado-carga">Cargando tablero...</p>}
 
       {modalAbierto && (
         <Modal
