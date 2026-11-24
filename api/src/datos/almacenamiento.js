@@ -14,8 +14,9 @@ export async function leerDatos(nombreArchivo, datosIniciales = []) {
     return JSON.parse(contenido);
   } catch (error) {
     if (error.name === 'NoSuchKey' || error.name === 'NotFound') {
-      await guardarDatos(nombreArchivo, datosIniciales);
-      return datosIniciales;
+      const copia = structuredClone(datosIniciales);
+      await guardarDatos(nombreArchivo, copia);
+      return copia;
     }
 
     throw error;
