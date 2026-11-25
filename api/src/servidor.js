@@ -9,7 +9,9 @@ import { manejarErrores } from './middleware/errores.js';
 
 const app = express();
 
-app.use(cors({ origin: ORIGEN_FRONTEND }));
+app.use(cors({
+  origin: (origin, cb) => cb(null, origin === process.env.FRONTEND_ORIGIN)
+}));
 app.use(express.json({ limit: LIMITE_JSON }));
 
 app.get('/api/salud', (_req, res) => {
