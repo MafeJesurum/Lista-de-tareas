@@ -21,6 +21,11 @@ app.use('/api/tareas', rutasTareas);
 
 app.use(manejarErrores);
 
-app.listen(PUERTO, () => {
-  console.log(`Servidor activo en el puerto ${PUERTO}`);
-});
+// Las pruebas levantan la app en un puerto libre, asi se evitan conflictos con el puerto 3000
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PUERTO, () => {
+    console.log(`Servidor activo en el puerto ${PUERTO}`);
+  });
+}
+
+export default app;
